@@ -1,0 +1,154 @@
+#!/bin/sh
+# inkVerb flow, verb.ink
+# This shows the flow process of SSL certificates via inkCert
+# This depends on the inkNetwork to communicate between the Client Verber and the CA Interm/Inker
+
+
+
+################## Setup
+
+# CA Main/local #
+
+#### inkcert: installcaroot
+####
+
+#### inkcert: newcarootkeys
+####
+
+
+# CA Interm/Inker #
+
+#### Serf: inkcertinstall
+#DEV NOTE: inkcertinstall runs automatically via inknetinstallca, but can be run by itself first
+
+#### Knight: inkcertinstallcainterm
+####
+
+#### Serf: inkcertsetcsr
+####
+
+#### Knight: inkcertintermcsr
+####
+
+
+# CA Main/local #
+
+#### inkcert: signintermcsr
+####
+
+
+# CA Interm/Inker #
+
+#### Knight: inkcertaddintermcert
+####
+
+#### Knight: inkcertnewocspstuff
+####
+
+
+# Verber Client #
+
+#### Serf: inkcertinstall
+####
+## ADD: Script to get inkCert CA and Interm keys on the Verber, find out where they even are!!
+##### Serf: inkcertinstallcarootcerts (not written yet)
+##################################
+
+
+################## Use
+
+############### New Cert
+
+
+
+
+
+# Verber Client #
+
+####JOB: verber-inkcertreceivecsr runs Serf: inkcertgetcertdone-inker
+####JOB: inkcertdo-newcert runs same-server Serf: inkcertgetcert-verber
+
+#### Serf: inkcertsetcsr
+####
+
+#### Serf: inkcertdo
+####
+##### Serf: inkcertreq
+#####
+###### Serf: inkcertmakecsr
+######
+
+
+#### inkNet Knight: verber-inkcertreceivecsr/inkcertgrantcert (below)
+####
+##### Serf: inkcertaddkeypair
+#####
+##### Serf: inkcertadd
+#####
+
+
+# CA Interm/Inker #
+
+####JOB: inkcertgetcert-verber runs Knight: verber-inkcertreceivecsr
+#### Knight: inkcertgrantcert
+####
+
+
+
+
+
+## Once all verb domains are ready as per above, this runs inkcertdo for each verb domain that is activated on the Verber:
+#### Serf: inkcertdo-all-verbs
+
+############### Revoke Cert
+
+
+# Verber Client #
+
+#### ADD THIS SCRIPT JOB FOR ALL BELOW: inkcertdo-killcert
+
+####JOB: inkcertdo-newcert runs same-server Serf: inkcertgetrevoke-verber
+
+
+# CA Interm/Inker #
+
+####JOB: inkcertgetrevoke-verber runs Knight: verber-inkcertreceiverevoke
+
+#### Knight: inkcertrevokecert
+####
+
+
+# Verber Client #
+
+####JOB: verber-inkcertreceiverevoke runs Serf: inkcertgetrevokedone-inker
+
+#### Serf: inkcertundo # batch script to run below, based on inkcertdo
+####
+##### Serf: inkcertrevoke # revoke from inkCert Proper
+#####
+##### Serf: inkcertremove # uninstall from Verber's Apache configs
+#####
+
+
+################## Letsencrypt
+## This prepares and uses the Letsencrypt service for inkcertdole and inkcertrevokele
+## Dependency Serf: inkcertinstall, newdomain/newdomaincgi for non-verb domains
+
+############### New Cert
+
+#### Serf: inkcertdole # batch runs the two jobs below
+##### Serf: inkcertreqle # actually gets the certs from Letsencrypt
+##### Serf: inkcertaddle # installs the SSL info in the Apache file's designated domain
+
+
+## Once all verb domains are ready as per above, this runs inkcertdole for each verb domain that is activated on the Verber:
+### Serf: inkcertdole-all-verbs
+
+############### Revoke Cert
+
+#### Serf: inkcertundole # batch script to run below, based on inkcertdole
+##### Serf: inkcertrevokele # revoke from LE
+##### Serf: inkcertremovele # uninstall from Verber's Apache configs
+
+
+

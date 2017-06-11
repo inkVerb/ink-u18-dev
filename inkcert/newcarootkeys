@@ -1,0 +1,96 @@
+#!/bin/sh
+# inkVerb repo knight, verb.ink
+
+# This creates the inkCert Authority root certs on a USB that already has inscallcaroot run for it
+## This is to be done on a local machine!
+## Prereq: Verber-ink installca
+## Prereq: Verber inkcertsetcsr for main cert domain profile
+## Prereq: Your inkCert CA USB is plugged in and mounted
+
+# Thanks Jamie Nguyen! https://jamielinux.com/
+## https://jamielinux.com/docs/openssl-certificate-authority/
+
+# Changes
+# /root/ca - /etc/inkcert/ca
+# ca.key.pem - ca.inkcert.key.pem
+# ca.cert.pem - ca.inkcert.cert.pem
+# intermediate.key.pem - interm.inkcert.key.pem
+# intermediate.cert.pem - interm.inkcert.cert.pem
+
+# How to use:
+## ./newcakeys [profile name - for csr extra info] [/full/path/to/mounted/usb]
+
+# Eg:
+## ./newcarootkeys mycorpserverprofile /media/user/USB
+
+
+# Check if previously set #
+
+if [ -f = "/etc/inkcert/ca/.root-interm.allset.inkcert" ]; then
+read -p "Um, how do I say this...
+
+You've already got CA root and intermediate keys all set up. Running this to set new ones could cause the apocalypse.
+
+...And, that's fine and all, but only if you're sure you won't get left behind.
+
+If you're ready, then press [Enter] to continue, or Ctrl+C to cancel now..."
+fi
+
+
+# Root CA #
+
+INFPROFILE=$1
+ROOTCAPATH=$2
+
+# Include config
+. /var/local/verb/configs/inkcert/csr-inf/csr.${INFPROFILE}.inf
+
+# inkCert root symlink
+if [ ! -d "/etc/inkcert/ca" ]; then
+rm /etc/inkcert/ca
+fi
+ln -s /${ROOTCAPATH}/inkcert/ca /etc/inkcert/
+
+# Create Root Key
+cd /etc/inkcert/ca
+PASSAUTHOR=$(pwgen -s -1 105)
+echo "${PASSAUTHOR}" > root/pf/pcafraez
+chmod 600 root/pf/pcafraez
+openssl genrsa -des3 -out root/private/ca.inkcert.key.pem -passout pass:root/pf/pcafraez 4096
+chmod 400 root/private/ca.inkcert.key.pem
+
+# Create Root Certificate
+## NOTE:
+### Whenever you use the req tool, you must specify a configuration file to use with the -config option,
+### otherwise OpenSSL will default to /etc/pki/tls/openssl.cnf
+cd /etc/inkcert/ca
+openssl req -config openssl.cnf \
+	-key root/private/ca.inkcert.key.pem \
+	-new -x509 -days 7300 -sha256 -extensions v3_ca \
+	-out root/certs/ca.inkcert.cert.pem \
+	-passin pass:root/pf/pcafraez \
+	-subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${ORGANIZATIONALUNIT}/CN=${COMMONNAME}/emailAddress=${EMAIL}/unstructuredName=${COMPANYNAME}/"
+chmod 444 certs/ca.inkcert.cert.pem
+## Make the backup
+timestamp=`date '+%Y_%m_%d__%H_%M_%S'`;
+cp /etc/inkcert/ca/root/certs/ca.inkcert.cert.pem /etc/inkcert/ca/root/certs/ca.inkcert.vbak_$timestamp.cert.pem
+cp /etc/inkcert/ca/root/certs/ca.inkcert.cert.pem /etc/inkcert/ca/ca-certs/
+cp /etc/inkcert/ca/root/certs/ca.inkcert.vbak_$timestamp.cert.pem /etc/inkcert/ca/ca-certs/
+
+# Output to check
+openssl x509 -noout -text -in certs/ca.inkcert.cert.pem
+read -p "Verify, then press [Enter] to continue to the Intermediate CA, or Ctrl+C to cancel now..."
+###INTERACT
+
+# Copy CA Root Cert to working req folder
+cp root/certs/ca.inkcert.cert.pem req
+
+# Remove the symlink
+rm /etc/inkcert/ca
+
+# Finish
+echo "Foil's off the bottle, Cap'n.
+
+Ready the goblets. Now you need to set up the Intermediate keys and sign the csr...
+"
+
