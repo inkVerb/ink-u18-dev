@@ -1,0 +1,12 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This displays the current Inkver version number
+
+# How to use:
+## ./inkver
+
+. /var/local/ink/configs/inklists/inkerverno
+echo "${VERNO}"
+

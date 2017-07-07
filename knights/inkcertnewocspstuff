@@ -1,0 +1,104 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This sets up OCSP credentials on the interm authority server
+## Prereq: Knight inkcertaddintermcert
+## Prereq: Verber inkcertsetcsr for ocsp subdomain, probably with "ocsp" as the subdomain for the main cert domain
+## Prereq: Verber newdomain, addsubdomain for OCSP, probably should be ocsp.DOMAIN.TLD
+
+# Thanks Jamie Nguyen! https://jamielinux.com/
+## https://jamielinux.com/docs/openssl-certificate-authority/
+# Changes
+# /root/ca - /etc/inkcert/ca
+# ca.key.pem - ca.inkcert.key.pem
+# ca.cert.pem - ca.inkcert.cert.pem
+# intermediate.key.pem - interm.inkcert.key.pem
+# intermediate.cert.pem - interm.inkcert.cert.pem
+
+# How to use:
+## ./inkcertnewocspstuff [profile name - for csr extra info] [profile name - for ocsp csr extra info] [ocsp URI] 
+# How to use (simple):
+## ./inkcertnewocspstuff [csr profile] [ocsp profile] [ocsp URI] 
+
+# Eg:
+## ./inkcertnewocspstuff myocspserverprofile ocsp.mydomain.com
+
+
+# Prerequisites
+## Check if domain is present
+if [ -z "${1}" ]; then
+echo "You need to enter a csr profile and domain. Follow the instructions."
+exit 22
+fi
+## Check if previously set
+if [ -f = "/etc/inkcert/ca/.root-interm.allset.inkcert" ]; then
+read -p "Just asking...
+
+You've already got OCSP set up.
+
+Are you sure you want new OCSP keys? It's not that big of a deal, but is needed after new Intermediate CA keys.
+
+If you're ready, then press [Enter] to continue, or Ctrl+C to cancel now..."
+fi
+
+## OCSP - for Intermediate ##
+
+OCSPPROFILE=$1
+OCSPDOMAIN=$2
+
+# Include the config
+. /var/local/verb/configs/inkcert/csr-inf/csr.${OCSPPROFILE}.inf
+
+# Key - OCSP
+cd /etc/inkcert/ca
+PASSOCSP=$(pwgen -s -1 105)
+echo "${PASSOCSP}" > intermediate/pf/ocspfraez
+chmod 600 intermediate/pf/ocspfraez
+openssl genrsa -des3 \
+      -out intermediate/private/${OCSPDOMAIN}.key.pem -passout pass:intermediate/pf/ocspfraez 4096
+
+# Write the config
+cd /etc/inkcert/ca
+echo "#!/bin/sh
+# inkCert config for the ocsp domain, verb.ink
+OCSPSITEDOMAIN=${OCSPDOMAIN}
+" > intermediate/pf/siteocspinf
+
+# CSR - OCSP
+openssl req -config intermediate/openssl.cnf -new -sha256 \
+	-key intermediate/private/interm.inkcert.key.pem \
+	-out intermediate/csr/${OCSPDOMAIN}.csr.pem \
+	-passin pass:intermediate/pf/pimfraez \
+	-subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${ORGANIZATIONALUNIT}/CN=${COMMONNAME}/emailAddress=${EMAIL}/unstructuredName=${COMPANYNAME}/"
+
+# Sign the csr for the cert
+## NOTE: specify the root ca file
+cd /etc/inkcert/ca
+openssl ca -config openssl.cnf -extensions v3_intermediate_ca \
+	-extensions ocsp -days 3650 -notext -md sha256 \
+	-in intermediate/csr/${OCSPDOMAIN}.csr.pem \
+	-out intermediate/certs/${OCSPDOMAIN}.cert.pem \
+	-passin pass:intermediate/pf/pimfraez
+
+# OCSP responder
+## Include the config
+. /etc/inkcert/ca/intermediate/pf/siteocspinf
+## Set up the responder
+openssl ocsp -port 127.0.0.1:2560 -text -sha256 \
+	-index intermediate/index.txt \
+	-CA intermediate/certs/ca-chain.cert.pem \
+	-rkey intermediate/private/${OCSPDOMAIN}.key.pem \
+	-rsigner intermediate/certs/${OCSPDOMAIN}.cert.pem \
+	-nrequest 1
+	-passin pass:intermediate/pf/pimfraez
+
+# Set the completed config
+touch /etc/inkcert/ca/.root-interm.allset.inkcert
+
+# Finish
+echo "Yeah! Pop the cork!
+
+OCSP is ready and you can start signing certs!
+"
+

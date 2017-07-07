@@ -1,0 +1,44 @@
+#!/bin/sh
+# inkVerb repo donjon knight, verb.ink
+set -e
+
+# This updates the NextCloud repo package
+
+# How to use:
+## ./updatereporc
+
+
+CVAPPNAME=nextcloud
+# Include the repo versions
+. /var/local/ink/configs/inklists/repoverlist
+DISTVER=${nextcloud}
+
+# Announce
+echo "Updating the NextCloud package to v${DISTVER}..."
+cd /var/local/ink/repo
+
+# Get the package
+curl -LO https://download.nextcloud.com/server/releases/nextcloud-${DISTVER}.tar.bz2
+## Check the hash
+curl -LO https://download.nextcloud.com/server/releases/nextcloud-${DISTVER}.tar.bz2.sha256
+CHECKSHA=$(shasum -a 256 -c nextcloud-${DISTVER}.tar.bz2.sha256 < nextcloud-${DISTVER}.tar.bz2)
+if [ "${CHECKSHA}" = "nextcloud-${DISTVER}.tar.bz2: OK" ]; then
+echo "Download checks out."
+rm nextcloud-${DISTVER}.tar.bz2.sha256
+else
+echo "SHA check failed. Dunno why."
+exit 44
+fi
+
+# Set it as the new package
+rm -f ${CVAPPNAME}.legacy.zip
+touch ${CVAPPNAME}.current.zip
+mv ${CVAPPNAME}.current.zip ${CVAPPNAME}.legacy.zip
+tar -xvjf nextcloud-${DISTVER}.tar.bz2
+rm nextcloud-${DISTVER}.tar.bz2
+zip -r ${CVAPPNAME}.current.zip ${CVAPPNAME}
+rm -rf ${CVAPPNAME}
+
+# Finish
+echo "Done. This repo now has NextCloud v${DISTVER}."
+

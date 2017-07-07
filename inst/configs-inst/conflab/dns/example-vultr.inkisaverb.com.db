@@ -1,0 +1,36 @@
+$TTL    86400
+@   IN  SOA ns1.your-domain-name.com. root.your-domain-name.com. (
+            2014100801  ; Serial
+            43200       ; Refresh
+            3600        ; Retry
+            1209600     ; Expire
+            180 )       ; Minimum TTL
+
+; Nameservers
+    IN  NS  ns1.your-domain-name.com.
+    IN  NS  ns2.your-domain-name.com.
+    IN  NS  ns3.your-domain-name.com.
+
+; Root site
+    IN  A   123.456.78.90
+
+; Hostname records
+*   IN  A   123.456.78.90
+sub1    IN  A   123.456.78.91
+sub2    IN  A   123.456.78.92
+
+; Aliases
+www IN  CNAME   your-domain-name.com.
+webmail IN  CNAME   ghs.google.com.
+
+; MX records
+@   IN  MX  1   aspmx.l.google.com.
+@   IN  MX  3   alt1.aspmx.l.google.com.
+@   IN  MX  3   alt2.aspmx.l.google.com.
+@   IN  MX  5   aspmx2.googlemail.com.
+@   IN  MX  5   aspmx3.googlemail.com.
+@   IN  MX  5   aspmx4.googlemail.com.
+@   IN  MX  5   aspmx5.googlemail.com.
+
+; SPF records
+@   IN  TXT "v=spf1 ip4:199.195.140.194 include:_spf.google.com ~all"

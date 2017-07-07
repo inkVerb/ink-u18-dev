@@ -1,0 +1,15 @@
+$ORIGIN inkisaverb.com.
+$TTL 1800
+inkisaverb.com. IN SOA ns1.digitalocean.com. hostmaster.inkisaverb.com. 1478101036 10800 3600 604800 1800
+inkisaverb.com. 1800 IN NS ns1.digitalocean.com.
+inkisaverb.com. 1800 IN NS ns2.digitalocean.com.
+inkisaverb.com. 1800 IN NS ns3.digitalocean.com.
+*.inkisaverb.com. 1800 IN CNAME inkisaverb.com.
+inkdkim._domainkey.inkisaverb.com. 1800 IN TXT "v=DKIM1; k=rsa; t=s; s=email; " 	  "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDShN2SpYrqlTX5Dbur8bokpFhMQKfttsnXVnyB99z8o5WKMPNHmJUkSxTV5NXfeY8RirZDNB4DAvXu8IQ2yo6PeUyul135tDv9AdReQMcWZ0Z3CR1fmcWdXZXHLtu8U96Ls3GQrth8IDuUPFs2/aYDfxfA2x/lFa9fAkCCALOIkwIDAQAB"
+inkisaverb.com. 1800 IN A 138.68.1.223
+mail.inkisaverb.com. 1800 IN A 138.68.1.223
+smtp.inkisaverb.com. 1800 IN A 138.68.1.223
+pop3.inkisaverb.com. 1800 IN A 138.68.1.223
+imap.inkisaverb.com. 1800 IN A 138.68.1.223
+inkisaverb.com. 1800 IN TXT "v=spf1 mx a ip4:138.68.1.223 a:_spf.google.com ~all"
+inkisaverb.com. 1800 IN MX 50 mail.inkisaverb.com.

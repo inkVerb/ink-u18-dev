@@ -1,0 +1,19 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This adds a subdomain "A Record" to an existing DNS record on the inkDNS nameserver
+
+# Thanks Vultr
+#https://www.vultr.com/docs/setup-your-own-dns-server-on-debian-ubuntu
+
+# How to use:
+## ./inkdnsaddsub [domain] [inkDKIM string]
+
+
+DNSDOMAIN=$1
+INKDKIMST=$2
+
+# Echo the statement
+sed i- "s/inkdkim\._domainkey.*/${INKDKIMST}" /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
+

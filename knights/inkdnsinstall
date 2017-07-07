@@ -1,0 +1,73 @@
+  #!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This installs Bind and sets it up as an inker's DNS
+## Note: the actual nameserver (ie ns1.inkisaverb.com) is not an Apache site and has not folder in the www/html folder. It only needs the domain pointing to the IP from the registrar's nameserver.
+
+# Thanks Vultr
+#https://www.vultr.com/docs/setup-your-own-dns-server-on-debian-ubuntu
+
+# How to use:
+## ./inkdnsinstall [domain.tld] [nameserver number]
+
+# Eg:
+## ./inkdnsinstall inkisaverb.com 1
+### This will prepare the server: for ns1.inkisaverb.com
+
+
+DNSSERVERDOM=$1
+DNSIDNO=$2
+
+# Check if installed
+if [ -f /var/local/ink/configs/inkdns/inkdnsstatus ]; then
+. /var/local/ink/configs/inkdns/inkdnsstatus
+ if [ "${INKDNSSTAT}" = "INSTALLED" ]; then
+echo "inkDNS already installed."
+exit 22
+ fi
+fi
+
+# Install Bind
+apt install -y bind9
+
+# Backup settings
+cd /etc/bind
+mv named.conf.options named.conf.options.original
+
+# New configs
+mkdir /var/local/ink/configs/inkdns
+cp /var/local/ink/configs/conflab/dns/NEWDNSDOMAIN.db /var/local/ink/configs/inkdns/NEW-DNS.db
+cp /var/local/ink/configs/conflab/dns/named.conf.options /var/local/ink/configs/inkdns/
+chown bind:bind /var/local/ink/configs/inkdns/named.conf.options
+ln -sfn /var/local/ink/configs/inkdns/named.conf.options /etc/bind
+
+# Create the directory
+mkdir /var/log/bind9
+chown bind:bind /var/log/bind9
+
+# Create the directories in configs
+mkdir /var/local/ink/configs/inkdns/zones
+chown bind:bind /var/local/ink/configs/inkdns/zones
+ln -s /var/local/ink/configs/inkdns/zones /etc/bind
+
+# Replace and set domain in Bind config files
+sed -i "s/DNSDOMAIN286/${DNSSERVERDOM}/g" /var/local/ink/configs/inkdns/NEW-DNS.db
+sed -i "s/DNSID286/ns${DNSIDNO}/g" /var/local/ink/configs/inkdns/NEW-DNS.db
+
+# Allow the port
+ufw allow 53
+ufw allow bind9
+
+# Restart
+/etc/init.d/bind9 restart
+
+# Config
+echo "#!/bin/sh
+
+INKDNSSTAT=INSTALLED
+" > /var/local/ink/configs/inkdns/inkdnsstatus
+
+# Finish
+echo "inkDNS installed."
+

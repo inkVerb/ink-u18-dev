@@ -1,0 +1,46 @@
+#!/bin/sh
+# inkVerb repo donjon knight, verb.ink
+set -e
+
+# This updates the Ampache repo package
+
+# How to use:
+## ./updaterepoampache
+
+
+CVAPPNAME=ampache
+# Include the repo versions
+. /var/local/ink/configs/inklists/repoverlist
+DISTVER=${ampache}
+
+# Announce
+echo "Updating the Ampache package to v${DISTVER}..."
+cd /var/local/ink/repo
+
+# Get the package
+curl -LO https://github.com/ampache/ampache/releases/download/3.8.2/ampache-3.8.2_all.zip
+## Check the hash
+CHECKSHA=$(shasum -a 256 ampache-${DISTVER}_all.zip)
+if [ "${CHECKSHA}" = "${ampachesha}  ampache-${DISTVER}_all.zip" ]; then
+echo "Download checks out."
+else
+echo "SHA check failed. The downloaded file is not what was expected. Did you set both the Ampache version AND the Ampache SHA per instructions?"
+exit 44
+fi
+
+# Set it as the new package
+rm -f ${CVAPPNAME}.legacy.zip
+touch ${CVAPPNAME}.current.zip
+mv ${CVAPPNAME}.current.zip ${CVAPPNAME}.legacy.zip
+mkdir ${CVAPPNAME}
+mv ampache-${DISTVER}_all.zip ${CVAPPNAME}
+cd ${CVAPPNAME}
+unzip ampache-${DISTVER}_all.zip
+rm ampache-${DISTVER}_all.zip
+cd ..
+zip -r ${CVAPPNAME}.current.zip ${CVAPPNAME}
+rm -rf ${CVAPPNAME}
+
+# Finish
+echo "Done. This repo now has Ampache v${DISTVER}."
+

@@ -1,0 +1,41 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This grants a certificate file based on a csr
+## This will result in a zip file with the Root, Intermediate, and site certs at /etc/inkcert/ca/req/DOMAIN.csr.pem
+
+# NOTE: the file must be named in the manner: DOMAINNAME.csr.pem and in the /etc/inkcert/ca/req directory
+
+
+# How to use:
+## ./inkcertgrantcert [domain] [csr file]
+
+
+DOMAIN=$1
+
+# Prepare working req directory
+cd /etc/inkcert/ca
+mkdir req/${DOMAIN}
+mv req/${DOMAIN}.csr.pem req/${DOMAIN}/
+
+# Copy CA certs to working req folder
+cp intermediate/certs/ca-chain.cert.pem req/${DOMAIN}/
+
+# Make the cert file
+cd req/${DOMAIN}
+# Below was an original example
+#openssl x509 -req -in ${DOMAIN}.csr -CA ca.inkcert.cert.pem -CAkey ca.inkcert.key.pem -CAcreateserial -out ${DOMAIN}.cert.pem -days 365
+openssl ca -config intermediate/openssl.cnf \
+	-extensions server_cert -days 375 -notext -md sha256 \
+	-in ${DOMAIN}.csr.pem \
+	-out ${DOMAIN}.cert.pem
+	-passin pass:/etc/inkcert/ca/intermediate/pf/pimfraez
+chmod 444 ${DOMAIN}.cert.pem
+shred -f -x ${DOMAIN}.csr.pem
+cp -f ${DOMAIN}.cert.pem intermediate/certs/
+cd ..
+zip -r inkcert.${DOMAIN}.zip ${DOMAIN}
+shred -f -x ${DOMAIN}/${DOMAIN}.cert.pem
+rm -rf ${DOMAIN}
+

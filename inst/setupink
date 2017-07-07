@@ -1,0 +1,86 @@
+#!/bin/sh
+
+# This sets-up the Inker for production
+## Prerequisite: the setupverb serf
+
+# How to use:
+## ./setupink
+
+
+# Check prerequesites
+if [ -e /var/local/verb/inst/setupverb ]; then
+echo "This Verber needs to be setup first.
+
+Run, according to instructions: inst/setupverb
+"
+exit 0
+fi
+
+# Create configs
+cd /var/local/ink
+mv inst/configs-inst configs
+
+# Executable scripts
+mv donjon/wpaddsites/updatewpaddrepo-inst.sh donjon/wpaddsites/updatewpaddrepo.sh
+chmod +x donjon/wpaddsites/updatewpaddrepo.sh
+
+# inkNet
+/var/local/verb/inknetmakeverberclient I_AM_INKER
+/var/local/verb/inknetinstallca
+
+# inkCert
+/var/local/verb/serfs/inkcertinstall
+/var/local/verb/serfs/inkcertdole-all-verbs
+
+# Block the repo from web listing
+echo "Options -Indexes" >> /var/local/ink/repo/.htaccess
+
+# Create inkNet Client links
+chmod u+s /var/local/ink/knights/verber-inkcertreceivecsr
+chmod u+s /var/local/ink/knights/verber-inkcertreceiverevoke
+## Read-only links for wpadd repo lists (This may need to be re-mounted at every startup.)
+#### ink to root
+ln -sfn /var/local/ink /root/
+#### Boss box
+ln -sfn /var/local/ink/knights /var/local/verb/boss/
+#### inkNet: verber-inkcertreceivecsr
+ln -sfn /var/local/ink/knights/verber-inkcertreceivecsr /var/local/verb/tools/
+#### inkNet: verber-inkcertreceiverevoke
+ln -sfn /var/local/ink/knights/verber-inkcertreceiverevoke /var/local/verb/tools/
+#### repo
+ln -sfn /var/local/ink/repo /var/local/verb/tools/
+#### wpadd machine list
+ln -sfn /var/local/ink/configs/wpaddsites/wpadd.list /var/local/verb/tools/
+#### wpadd human list
+ln -sfn /var/local/ink/configs/wpaddsites/wpadd.human.list /var/local/verb/tools/
+
+# Link the inkget repo to the hostname
+## Check that all is well
+if [ "${SITEHOST}.${SITENAME}.verb.${SITETLD}" = "$(hostname -f)" ];
+then
+echo "Hostname and URI check out..."
+else
+echo "The full hostname doesn't include the inkVerb namespace URI. Fix that before proceeding.
+The info is in: /etc/hosts
+...which is sometimes over-written at startup by:
+/etc/cloud/templates/hosts.debian.tmpl ...so try changing that.
+It should say this:
+
+127.0.1.1 ${SITEHOST}.${SITENAME}.verb.${SITETLD} ${SITEHOST}
+${SITEIP} ${SITEHOST}.${SITENAME}.verb.${SITETLD} ${SITEHOST}
+127.0.0.1 localhost.localdomain localhost
+
+Check with your hosting provider if you still have trouble.
+I quit."
+exit 22
+fi
+
+# Start the Inker cron entries
+cp /var/local/verb/configs/inkcron /etc/cron.d/inker
+
+# Finish
+echo "All set.
+This Inker is ready to ink and get Verbers inking.
+
+Note that repos and cert authorities are not served until you install inkNet."
+

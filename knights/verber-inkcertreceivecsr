@@ -1,0 +1,28 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This processes a received csr, signs it, and pushes it back to the requesting Verber
+## This is run remotely by the Verber
+
+# Verber remote with special permissions
+## Make this file able to work, run as root who owns the file:
+# chown root verber-inkcertreceivecsr
+# chmod u+s verber-inkcertreceivecsr
+
+# How to use:
+## ./verber-inkcertreceivecsr [filename (no .zip)] [domain] [Verber namespace]
+
+
+FILENAME=$1
+DOMAIN=$2
+VERBNAME=$3
+
+# Process the csr
+
+
+# Push the certs back to the Verber
+# inkNet Inker runs on Verber: inkcertgetcertdone-inker
+
+
+

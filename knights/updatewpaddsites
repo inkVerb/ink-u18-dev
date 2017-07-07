@@ -1,0 +1,22 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This runs the regular wpaddsite update script (updatewpaddrepo.sh) immediately
+## Normally, updatewpaddrepo.sh runs by cron, but this runs it right now, such as before an install
+
+# How to use:
+## ./updatewpaddsites
+
+
+# Start
+echo "Updating wpaddsites now...
+"
+
+# Run
+/ink/donjon/wpaddsites/updatewpaddrepo.sh
+
+# Finish
+echo "wpaddsites are now up to date.
+"
+

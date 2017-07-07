@@ -1,0 +1,47 @@
+#!/bin/sh
+# inkVerb repo donjon knight, verb.ink
+set -e
+
+# This updates the WordPress repo package
+
+# How to use:
+## ./updaterepowp
+
+
+CVAPPNAME=wordpress
+# Include the repo versions
+. /var/local/ink/configs/inklists/repoverlist
+DISTVER=${wordpress}
+
+# Announce
+echo "Updating the WordPress package to the latest version..."
+cd /var/local/ink/repo
+
+# Get the package
+rm -rf latest.tar.gz
+curl -LO https://wordpress.org/latest.tar.gz
+## Check the hash
+rm -rf latest.tar.gz.sha1
+curl -LO https://wordpress.org/latest.tar.gz.sha1
+CHECKSHA=$(sha1sum latest.tar.gz)
+READSHA=$(cat latest.tar.gz.sha1)
+if [ "${CHECKSHA}" = "${READSHA}  latest.tar.gz" ]; then
+echo "Download checks out."
+rm latest.tar.gz.sha1
+else
+echo "SHA check failed. Dunno why."
+exit 44
+fi
+
+# Set it as the new package
+rm -f ${CVAPPNAME}.legacy.zip
+touch ${CVAPPNAME}.current.zip
+mv ${CVAPPNAME}.current.zip ${CVAPPNAME}.legacy.zip
+tar -xvf latest.tar.gz
+rm latest.tar.gz
+zip -r ${CVAPPNAME}.current.zip ${CVAPPNAME}
+rm -rf ${CVAPPNAME}
+
+# Finish
+echo "Done. This repo now has the latest version of WordPress."
+

@@ -1,0 +1,6 @@
+#!/bin/sh
+## inkVerb Inker config, verb.ink
+## This records the Inker site-wide inkget repo
+
+INKREPO=NOT_SET
+

@@ -1,0 +1,37 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This creates a new DNS record to the inkDNS nameserver
+
+# Thanks Vultr
+#https://www.vultr.com/docs/setup-your-own-dns-server-on-debian-ubuntu
+
+# How to use:
+## ./inkdnsnew [domain] [IP of host] [inkDKIM statement - can be left blank]
+
+
+DNSDOMAIN=$1
+HOSTIP=$2
+INKDKIM=$3
+
+# If inkDKIM not stated
+if [ -z $3 ]; then
+INKDKIM="inkdkim._domainkey"
+fi
+
+# Echo the config statement
+echo "zone \"${DNSDOMAIN}\" {
+        type master;
+        file "/etc/bind/zones/${DNSDOMAIN}.db";
+};
+" >> /etc/bind/named.conf
+
+# Copy the config
+cp /var/local/ink/configs/inkdns/NEW-DNS.db /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
+
+# Replace variables
+sed -i "s/hostdomain286/${DNSDOMAIN}/g"  /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
+sed -i "s/hostip286/${HOSTIP}/g"  /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
+sed -i "s/inkdkim\._domainkey.*/${INKDKIM}/g"  /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
+

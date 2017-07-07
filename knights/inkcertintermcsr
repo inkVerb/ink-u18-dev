@@ -1,0 +1,60 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This installs the Certificate Authority certs on the authority server
+## Prereq: Inker installca
+## Prereq: Verber inkcertsetcsr for main cert domain profile
+
+# Thanks Jamie Nguyen! https://jamielinux.com/
+## https://jamielinux.com/docs/openssl-certificate-authority/
+# Changes
+# /root/ca - /etc/inkcert/ca
+# ca.key.pem - ca.inkcert.key.pem
+# ca.cert.pem - ca.inkcert.cert.pem
+# intermediate.key.pem - interm.inkcert.key.pem
+# intermediate.cert.pem - interm.inkcert.cert.pem
+
+# How to use:
+## ./inkcertintermcsr [profile name - for csr extra info]
+
+# Eg:
+## ./inkcertintermcsr mycorpserverprofile
+
+
+INFPROFILE=$1
+
+# Include config
+. /var/local/verb/configs/inkcert/csr-inf/csr.${INFPROFILE}.inf
+
+# Create Intermediate Key
+cd /etc/inkcert/ca
+PASSINTERM=$(pwgen -s -1 105)
+echo "${PASSINTERM}" > intermediate/pf/pimfraez
+chmod 600 intermediate/pf/pimfraez
+openssl genrsa -des3 \
+	-out intermediate/private/interm.inkcert.key.pem -passout pass:intermediate/pf/pimfraez 4096
+###INTERACT Enter pass phrase for interm.inkcert.key.pem: secretpassword
+###INTERACT Verifying - Enter pass phrase for interm.inkcert.key.pem: secretpassword
+chmod 400 intermediate/private/interm.inkcert.key.pem
+
+# Create Intermediate Certificate
+## NOTE:
+### Whenever you use the req tool, you must specify a configuration file to use with the -config option,
+### otherwise OpenSSL will default to /etc/pki/tls/openssl.cnf
+cd /etc/inkcert/ca
+# CSR
+openssl req -config intermediate/openssl.cnf -new -sha256 \
+	-key intermediate/private/interm.inkcert.key.pem \
+	-out req/intermediate.csr.pem \
+	-passin pass:intermediate/pf/pimfraez \
+	-subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${ORGANIZATIONALUNIT}/CN=${COMMONNAME}/emailAddress=${EMAIL}/unstructuredName=${COMPANYNAME}/"
+
+# Finish
+echo "Alrighty!
+
+Download what you need here: ink/req/intermediate.csr.pem
+
+After you finish, you can upload the .zip file to the same ink/req folder.
+"
+

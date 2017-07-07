@@ -1,0 +1,31 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This revokes a certificate based on its domain
+## This will result in a zip file with the Root, Intermediate, and site certs in /etc/inkcert/ca/req
+
+# NOTE: the file must be named in the manner: DOMAINNAME.csr.pem and in the /etc/inkcert/ca/req directory
+
+
+# How to use:
+## ./inkcertrevokecert [domain]
+
+
+DOMAIN=$1
+
+# Revoke
+cd /etc/inkcert/ca
+openssl ca -config intermediate/openssl.cnf \
+	-revoke intermediate/certs/${DOMAIN}.cert.pem
+	-passin pass:intermediate/pf/pimfraez
+
+# CRL re-created
+cd /etc/inkcert/ca
+rm -f intermediate/crl/intermediate.crl.pem
+openssl ca -config intermediate/openssl.cnf \
+	-gencrl -out intermediate/crl/intermediate.crl.pem
+
+
+
+

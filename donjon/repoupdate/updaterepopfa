@@ -1,0 +1,43 @@
+#!/bin/sh
+# inkVerb repo donjon knight, verb.ink
+set -e
+
+# This updates the PostfixAdmin repo package
+
+# How to use:
+## ./updaterepopfa
+
+
+CVAPPNAME=postfixadmin
+# Include the repo versions
+. /var/local/ink/configs/inklists/repoverlist
+DISTVER=${postfixadmin}
+
+# Announce
+echo "Updating the PostfixAdmin package to v${DISTVER}..."
+cd /var/local/ink/repo
+
+# Get the package
+curl -LO https://sourceforge.net/projects/postfixadmin/files/postfixadmin/postfixadmin-${DISTVER}/postfixadmin-${DISTVER}.tar.gz
+## Check the hash
+CHECKSHA=$(sha1sum postfixadmin-${DISTVER}.tar.gz)
+if [ "${CHECKSHA}" = "${postfixadminsha}  postfixadmin-${DISTVER}.tar.gz" ]; then
+echo "Download checks out."
+else
+echo "SHA check failed. The downloaded file is not what was expected. Did you set both the PostfixAdmin version AND the PostfixAdmin SHA for .tar.gz?"
+exit 44
+fi
+
+# Set it as the new package
+rm -f ${CVAPPNAME}.legacy.zip
+touch ${CVAPPNAME}.current.zip
+mv ${CVAPPNAME}.current.zip ${CVAPPNAME}.legacy.zip
+tar -xvf postfixadmin-${DISTVER}.tar.gz
+rm postfixadmin-${DISTVER}.tar.gz
+mv postfixadmin-${DISTVER} ${CVAPPNAME}
+zip -r ${CVAPPNAME}.current.zip ${CVAPPNAME}
+rm -rf ${CVAPPNAME}
+
+# Finish
+echo "Done. This repo now has PostfixAdmin v${DISTVER}."
+

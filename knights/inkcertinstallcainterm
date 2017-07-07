@@ -1,0 +1,77 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This installs the Intermediate Certificate Authority certs on the authority server for inkCert serfs and knights to use
+## Prereq: Verber Serf inkcertinstall
+## Prereq: A domain for the CRL must exist in Apache, probably cert.SOMEDOMAIN.com via newdomain and addsubdomain, but it can be anything. See useage examples.
+
+# Thanks Jamie Nguyen! https://jamielinux.com/
+## https://jamielinux.com/docs/openssl-certificate-authority/
+# Changes
+# /root/ca - /etc/inkcert/ca
+# ca.key.pem - ca.inkcert.key.pem
+# ca.cert.pem - ca.inkcert.cert.pem
+# intermediate.key.pem - interm.inkcert.key.pem
+# intermediate.cert.pem - interm.inkcert.cert.pem
+
+# How to use:
+## ./inkcertinstallcainterm [crl URI - embedded in certs for revoke lookup] [ocsp URI - embedded in certs for active/revoke status lookup]
+# How to use simple:
+## ./inkcertinstallcainterm [crl URI] [ocsp URI]
+
+# Eg:
+## ./inkcertinstallcainterm certs.inkisaverb.com ocsp.inkisaverb.com
+## ./inkcertinstallcainterm certs.inkisaverb.com/certs ocsp.inkisaverb.com/ocsp
+## ./inkcertinstallcainterm inkisaverb.com/certs inkisaverb.com/ocsp
+
+
+# Intermediate CA #
+
+CRLURI=$1
+OCSPURI=$2
+
+# Prerequesites
+. /var/local/verb/configs/inkcert/inkcertstatus
+if ["${INKCERTINSTALLED}" != "DONE" ]; then
+echo "Install inkCert on the Verber first, use inkcertinstall"
+exit 22
+fi
+
+# Prepare directories
+cd /etc/inkcert/
+mkdir ca
+mkdir ca/req
+mkdir ca/ca-certs
+mkdir ca/intermediate
+cd ca/intermediate
+mkdir certs crl csr newcerts private pf
+chmod 700 private
+ln -s /etc/inkcert/ca/req /var/local/ink/
+ln -s /etc/inkcert/ca/req /var/local/verb/boss/
+
+# Important files
+touch index.txt
+echo 1000 > serial
+## Revocation lists
+echo 1000 > /etc/inkcert/ca/intermediate/crlnumber
+cp /var/local/ink/configs/conflab/ca/interm-openssl.cnf /etc/inkcert/ca/intermediate/openssl.cnf
+sed -i "s/crluri286/${CRLURI}/g" /etc/inkcert/ca/intermediate/openssl.cnf
+sed -i "s/ocspuri286/${OCSPURI}/g" /etc/inkcert/ca/intermediate/openssl.cnf
+
+# CRL intial (it will be empty, but it needs to exist)
+cd /etc/inkcert/ca
+openssl ca -config intermediate/openssl.cnf \
+	-gencrl -out intermediate/crl/inkCert.crl.pem
+ln -s /etc/inkcert/ca/intermediate/crl/intermediate.crl.pem /var/www/html/${CRLURI}/inkCert.crl.pem
+chown -R www-data:www-data /var/www/html/${CRLURI}/inkCert.crl.pem
+
+# OCSP firewall
+ufw allow 2560
+
+# Finish
+echo "It's yer ship, Cap'n!
+
+She's ready to install the new CA keys!
+"
+

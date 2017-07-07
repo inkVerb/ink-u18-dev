@@ -1,0 +1,24 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This links the repo directory to the domain used as the "repo" in a Verber's setupverb serf
+## Prerequisite: a domain directory must be added via the newdomain or newdomaincgi serf
+
+# How to use:
+## ./wgetrepolink [domain]
+
+
+REPODOMAIN=$1
+
+if [ ! -d /var/www/html/${REPODOMAIN}/ ]; then
+echo "The necessary web folder does not exist. Is the domain installed?"
+exit 22
+fi
+ln -sfn /var/local/ink/repo /var/www/html/${REPODOMAIN}/
+echo "allow from all
+Options +Indexes
+IndexOptions +FancyIndexing
+" > /var/www/html/${REPODOMAIN}/.htaccess
+sed -i "s/INKREPO=.*/INKREPO=\"${REPODOMAIN}\"/g" /var/local/ink/configs/siteinkerrepo
+

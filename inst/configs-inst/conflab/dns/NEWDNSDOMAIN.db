@@ -1,0 +1,37 @@
+$TTL    86400
+hostdomain286.   IN  SOA DNSID286.DNSDOMAIN286. root.hostdomain286. (
+            2014100801  ; Serial
+            10800       ; Refresh
+            3600        ; Retry
+            604800     ; Expire
+            1800 )       ; Minimum TTL
+
+; Nameserver Defaults
+hostdomain286.    IN  NS  ns1.DNSDOMAIN286.
+hostdomain286.    IN  NS  ns2.DNSDOMAIN286.
+hostdomain286.    IN  NS  ns3.DNSDOMAIN286.
+
+; Root Site Default
+hostdomain286.    IN  A   hostip286
+
+; Hostname Record Defaults
+mail.hostdomain286.    IN  A   hostip286
+smtp.hostdomain286.    IN  A   hostip286
+imap.hostdomain286.    IN  A   hostip286
+pop3.hostdomain286.    IN  A   hostip286
+pop2.hostdomain286.    IN  A   hostip286
+pop.hostdomain286.    IN  A   hostip286
+
+; Aliase Default
+*.hostdomain286.   IN  CNAME   hostip286
+email.hostdomain286.    IN  CNAME   hostip286
+
+; TXT Record Defaults
+hostdomain286.   IN TXT "v=spf1 mx a ip4:hostip286 a:_spf.google.com ~all"
+inkdkim._domainkey
+
+; MX Record Defaults
+hostdomain286.   IN  MX  5   mail.hostdomain286.
+
+; Custom Records added by inkDNS
+

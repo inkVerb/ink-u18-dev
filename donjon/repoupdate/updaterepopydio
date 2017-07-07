@@ -1,0 +1,43 @@
+#!/bin/sh
+# inkVerb repo donjon knight, verb.ink
+set -e
+
+# This updates the Pydio repo package
+
+# How to use:
+## ./updaterepopydio
+
+
+CVAPPNAME=pydio
+# Include the repo versions
+. /var/local/ink/configs/inklists/repoverlist
+DISTVER=${pydio}
+
+# Announce
+echo "Updating the Pydio package to v${DISTVER}..."
+cd /var/local/ink/repo
+
+# Get the package
+curl -LO https://sourceforge.net/projects/ajaxplorer/files/pydio/stable-channel/${DISTVER}/pydio-core-${DISTVER}.tar.gz
+## Check the hash
+CHECKSHA=$(sha1sum pydio-core-${DISTVER}.tar.gz)
+if [ "${CHECKSHA}" = "${pydiosha}  pydio-core-${DISTVER}.tar.gz" ]; then
+echo "Download checks out."
+else
+echo "SHA check failed. The downloaded file is not what was expected. Did you set both the Pydio version AND the Pydio SHA for .tar.gz?"
+exit 44
+fi
+
+# Set it as the new package
+rm -f ${CVAPPNAME}.legacy.zip
+touch ${CVAPPNAME}.current.zip
+mv ${CVAPPNAME}.current.zip ${CVAPPNAME}.legacy.zip
+tar -xvf pydio-core-${DISTVER}.tar.gz
+rm pydio-core-${DISTVER}.tar.gz
+mv pydio-core-${DISTVER} ${CVAPPNAME}
+zip -r ${CVAPPNAME}.current.zip ${CVAPPNAME}
+rm -rf ${CVAPPNAME}
+
+# Finish
+echo "Done. This repo now has Pydio v${DISTVER}."
+

@@ -1,0 +1,29 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This processes a received revoke request from a Verber, then pushes a file back to the Verber and tells it to do its next job
+## This is run remotely by the Verber
+
+# Verber remote with special permissions
+## Make this file able to work, run as root who owns the file:
+# chown root verber-inkcertreceiverevoke
+# chmod u+s verber-inkcertreceiverevoke
+
+# How to use:
+## ./verber-inkcertreceiverevoke [filename (no .zip)] [domain] [Verber namespace]
+
+
+FILENAME=$1
+DOMAIN=$2
+VERBNAME=$3
+
+# Process the revoke
+
+
+# Push the revoke confirmation file back to the Verber
+
+
+# Tell the Verber to do its job
+# inkNet Inker runs on Verber: inkcertgetrevokedone-inker
+

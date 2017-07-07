@@ -1,0 +1,86 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This installs the Composer Roundcube Plugin installer
+## This does NOT need to have Roundcube installed, but will install the plugins to the CURRENT/plugins folder
+## It is interactive and should be run from a command prompt
+## This is intended to be run on an "ink" site that updates the plugins in the ink repository
+
+# How to use:
+## ./installrcinkplugins
+
+
+# Roundcube Plugins (Composer installer)
+mkdir /var/www/email
+mkdir /var/www/email/roundcube
+mkdir /var/www/email/roundcube/plugins
+chown -R www-data:www-data /var/www/email
+cd /var/www/email/roundcube
+curl -s https://getcomposer.org/installer | php
+cp composer.json-dist  composer.json
+## Plugins
+### Unfortuntately, I only know how to sed this one line at a time.
+sed -i '/\"require\": {/ a\
+        \"johndoh\/contextmenu\": \"dev-master\",' composer.json
+sed -i '/\"require\": {/ a\
+        \"cor\/keyboard_shortcuts\": \"dev-master\",' composer.json
+sed -i '/\"require\": {/ a\
+        \"johndoh\/markasjunk2\": \"dev-master\",' composer.json
+sed -i '/\"require\": {/ a\
+        \"kitist\/html5_notifier\": \"dev-master\",' composer.json
+sed -i '/\"require\": {/ a\
+        \"roundcube\/chbox\": \"dev-master\",' composer.json
+sed -i '/\"require\": {/ a\
+        \"roundcube\/authres_status\": \"dev-master",' composer.json
+sed -i '/\"require\": {/ a\
+        \"roundcube\/custom-from\": \"dev-master\",' composer.json
+sed -i '/\"require\": {/ a\
+        \"roundcube\/carddav\": \"dev-master\",' composer.json
+sed -i '/\"require\": {/ a\
+        \"elm\/identity_smtp\": \"dev-master\",' composer.json
+sed -i '/\"require\": {/ a\
+        \"stwa\/google-addressbook\": \"dev-master\",' composer.json
+sed -i '/\"require\": {/ a\
+        \"gianlucagiacometti\/forward\": \"dev-master\",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"felixgilles\/calendar_notifier\": \"~1.0.0\",' composer.json
+## Below are commented while testing above global dev-master settings
+#sed -i '/\"require\": {/ a\
+#        \"johndoh\/contextmenu\": \"~2.1.2\",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"cor\/keyboard_shortcuts\": \"~2.4.1\",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"johndoh\/markasjunk2\": \"~1.9\",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"kitist\/html5_notifier\": \"~0.6.2\",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"roundcube\/chbox\": \"~0.2.4\",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"roundcube\/authres_status\": \"~0.2.5",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"roundcube\/custom-from\": \"\*\",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"roundcube\/carddav\": \"~0.1.0\",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"elm\/identity_smtp\": \"\*\",' composer.json
+#sed -i '/\"require\": {/ a\
+#        \"stwa\/google-addressbook\": \"~1.0.0\",' composer.json
+#sed -i '/\"require\": {/ a\
+#sed -i '/\"require\": {/ a\
+#        \"gianlucagiacometti\/forward\": \"dev-master\",' composer.json
+## The following plugins are not included since an old Forwarding plugin still works
+## These are for future consideration when the need arises:
+#        "gianlucagiacometti\/forward": "*",\n
+#        "stephanblanke\/aliases": "~1.0.0",\n
+
+## Now finish the composer installation
+### First, update just in case
+php composer.phar update
+### Then, run install ( -n = no interaction)
+php composer.phar install -n
+
+# Finished
+echo "
+Roundcube Plugins have now been installed via Composer.
+"

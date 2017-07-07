@@ -1,0 +1,25 @@
+#!/bin/sh
+#inkVerbSerf! verb.ink
+set -e
+
+# This downloads and updates the Inker core files of a Verber™, including knights and inklists
+## This also runs scripts that make other changes that may affect the Verber
+
+# How to use:
+## ./updateinker
+
+
+# Include the config
+. /var/local/ink/configs/inkerinfo
+
+# Download and unpack the latest checked version from the Inkver repo
+cd /var/local/ink/
+git clone https://github.com/inkverb/${INKUPDATEREPO}
+
+# Run the update script
+chmod +x /var/local/ink/${INKUPDATEREPO}/update
+/var/local/ink/${INKUPDATEREPO}/update
+
+# Remove the entire updater
+rm -rf /var/local/ink/${INKUPDATEREPO}
+

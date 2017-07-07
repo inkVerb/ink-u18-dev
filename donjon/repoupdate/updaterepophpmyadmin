@@ -1,0 +1,43 @@
+#!/bin/sh
+# inkVerb repo donjon knight, verb.ink
+set -e
+
+# This updates the phpMyAdmin repo package
+
+# How to use:
+## ./updaterepophpmyadmin
+
+
+CVAPPNAME=phpmyadmin
+# Include the repo versions
+. /var/local/ink/configs/inklists/repoverlist
+DISTVER=${phpmyadmin}
+
+# Announce
+echo "Updating the phpMyAdmin package to v${DISTVER}..."
+cd /var/local/ink/repo
+
+# Get the package
+curl -LO https://files.phpmyadmin.net/phpMyAdmin/${DISTVER}/phpMyAdmin-${DISTVER}-all-languages.zip
+## Check the hash
+CHECKSHA=$(shasum -a 256 phpMyAdmin-${DISTVER}-all-languages.zip)
+if [ "${CHECKSHA}" = "${phpmyadminsha}  phpMyAdmin-${DISTVER}-all-languages.zip" ]; then
+echo "Download checks out."
+else
+echo "SHA check failed. The downloaded file is not what was expected. Did you set both the phpMyAdmin version AND the phpMyAdmin SHA per instructions?"
+exit 44
+fi
+
+# Set it as the new package
+rm -f ${CVAPPNAME}.legacy.zip
+touch ${CVAPPNAME}.current.zip
+mv ${CVAPPNAME}.current.zip ${CVAPPNAME}.legacy.zip
+unzip phpMyAdmin-${DISTVER}-all-languages.zip
+rm phpMyAdmin-${DISTVER}-all-languages.zip
+mv phpMyAdmin-${DISTVER}-all-languages ${CVAPPNAME}
+zip -r ${CVAPPNAME}.current.zip ${CVAPPNAME}
+rm -rf ${CVAPPNAME}
+
+# Finish
+echo "Done. This repo now has phpMyAdmin v${DISTVER}."
+

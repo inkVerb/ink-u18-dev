@@ -1,0 +1,93 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+set -e
+
+# This installs the CA Intermediate certs on the authority server and makes new certs for OCSP
+## This also copies the Root CA cert to a public html folder so it can be downloaded and installed.
+## Prereq: The CA domain for the Root CA certificate must have been created by the newdomain Verber serf
+## Prereq: inkCert installcaroot (done on a local computer)
+## Prereq: Verber inkcertsetcsr profile for ocsp cert domain
+## Prereq: A domain for the CRL must exist in Apache, probably cert.SOMEDOMAIN.com via newdomain and addsubdomain, but it can be anything. See useage examples.
+## Prereq: local inkCert CA signintermcsr, and the zip file must be uploaded and at /etc/inkcert/ca/req/interm.zip (links in ~/ink/req or ~/boss/req)
+
+
+# Thanks Jamie Nguyen! https://jamielinux.com/
+## https://jamielinux.com/docs/openssl-certificate-authority/
+# Changes
+# /root/ca - /etc/inkcert/ca
+# ca.key.pem - ca.inkcert.key.pem
+# ca.cert.pem - ca.inkcert.cert.pem
+# intermediate.key.pem - interm.inkcert.key.pem
+# intermediate.cert.pem - interm.inkcert.cert.pem
+
+# How to use:
+## ./inkcertaddintermcert [Root CA certificate domain]
+
+# Eg:
+## ./inkcertaddintermcert cert.inkisaverb.com
+
+
+CADOMAIN=$1
+
+# Prerequesites
+## If domain is present
+if [ -z "${1}" ]; then
+echo "You need to enter a domain for the interm CA."
+exit 22
+fi
+## Check if previously set
+if [ -f = "/etc/inkcert/ca/.root-interm.allset.inkcert" ]; then
+read -p "Just asking...
+
+You've already got CA intermediate keys all set up. Running this to set new ones could cause the apocalypse.
+
+Are you sure you want new CA intermediate keys?
+
+If you're ready, then press [Enter] to continue, or Ctrl+C to cancel now..."
+fi
+
+# Remove any old stuff
+if [ -f "/etc/inkcert/ca/intermediate/certs/interm.inkcert.cert.pem" ]; then
+rm -f /etc/inkcert/ca/intermediate/certs/interm.inkcert.cert.pem
+fi
+if [ -f "/etc/inkcert/ca/intermediate/certs/ca-chain.cert.pem" ]; then
+rm -f /etc/inkcert/ca/intermediate/certs/ca-chain.cert.pem
+fi
+if [ -f "/etc/inkcert/ca/ca-certs/ca.inkcert.cert.pem" ]; then
+rm -f /etc/inkcert/ca/ca-certs/ca.inkcert.cert.pem
+fi
+
+# Unzip and put everything where it goes
+cd /etc/inkcert/ca/req
+unzip interm.zip
+rm -f interm.zip
+mv interm/ca.inkcert.cert.pem /etc/inkcert/ca/ca-certs/
+mv interm/*.cert.pem /etc/inkcert/ca/intermediate/certs/
+rm -rf interm
+cd ..
+
+# Chain file
+## The CA root certificate can be ommitted from line 2 below, so the chain only includes the intermediate cert, IF the root CA cert is installed on the workstation.
+cat intermediate/certs/interm.inkcert.cert.pem \
+	ca-certs/ca.inkcert.cert.pem > intermediate/certs/ca-chain.cert.pem
+chmod 444 intermediate/certs/ca-chain.cert.pem
+
+# Public web copies
+if [ ! -d = "/var/www/html/${CADOMAIN}/cert/" ]; then
+mkdir /var/www/html/${CADOMAIN}/cert
+fi
+cp /etc/inkcert/ca/ca-certs/ca.inkcert.cert.pem /var/www/html/${CADOMAIN}/cert/
+cp /etc/inkcert/ca/intermediate/certs/interm.inkcert.cert.pem /var/www/html/${CADOMAIN}/cert/
+cp /etc/inkcert/ca/intermediate/certs/ca-chain.cert.pem /var/www/html/${CADOMAIN}/cert/
+chown -R www-data:www-data /var/www/html/${CADOMAIN}/cert
+
+## DEV: This may be unnecessary. Remove it if everything is working
+# Link CA Intermediate Cert to working req folder
+#ln -s /etc/inkcert/ca/intermediate/certs/interm.inkcert.cert.pem /etc/inkcert/ca/req/
+
+# Finish
+echo "Almost there!
+
+The Intermediate CA is all setup. Now, you need to run inkcertnewocspstuff.
+"
+

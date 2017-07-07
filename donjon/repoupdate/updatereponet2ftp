@@ -1,0 +1,46 @@
+#!/bin/sh
+# inkVerb repo donjon knight, verb.ink
+set -e
+
+# This updates the net2ftp repo package
+
+# How to use:
+## ./updatereponet2ftp
+
+
+CVAPPNAME=net2ftp
+# Include the repo versions
+. /var/local/ink/configs/inklists/repoverlist
+DISTVER=${net2ftp}
+
+# Announce
+echo "Updating the net2ftp package to v${DISTVER}..."
+cd /var/local/ink/repo
+
+# Get the package
+curl -LO http://www.net2ftp.com/download/net2ftp_v${DISTVER}.zip
+## Check the hash
+CHECKSHA=$(shasum -a 256 net2ftp_v${DISTVER}.zip)
+if [ "${CHECKSHA}" = "${net2ftpsha}  net2ftp_v${DISTVER}.zip" ]; then
+echo "Download checks out."
+else
+echo "SHA check failed. The downloaded file is not what was expected. Did you set both the net2ftp version AND the net2ftp SHA per instructions?"
+exit 44
+fi
+
+# Set it as the new package
+rm -f ${CVAPPNAME}.legacy.zip
+touch ${CVAPPNAME}.current.zip
+mv ${CVAPPNAME}.current.zip ${CVAPPNAME}.legacy.zip
+unzip net2ftp_v${DISTVER}.zip
+rm net2ftp_v${DISTVER}.zip
+cd net2ftp_v${DISTVER}
+mv files_to_upload ../${CVAPPNAME}
+cd ..
+rm -rf net2ftp_v${DISTVER}
+zip -r ${CVAPPNAME}.current.zip ${CVAPPNAME}
+rm -rf ${CVAPPNAME}
+
+# Finish
+echo "Done. This repo now has net2ftp v${DISTVER}."
+
