@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=postfixadmin
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${postfixadmin}
+DISTVER="${postfixadmin}"
 
 # Announce
 echo "Updating the PostfixAdmin package to v${DISTVER}..."

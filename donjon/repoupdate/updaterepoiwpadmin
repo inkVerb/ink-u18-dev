@@ -20,7 +20,7 @@ IWPEMAIL=$1
 CVAPPNAME=iwpadmin
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${iwpadmin}
+DISTVER="${iwpadmin}"
 
 # Announce
 echo "Updating the InfiniteWP-Admin package to v${DISTVER}..."

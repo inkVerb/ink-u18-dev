@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=orangehrm
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${orangehrm}
+DISTVER="${orangehrm}"
 
 # Announce
 echo "Updating the OrangeHRM package to v${DISTVER}..."

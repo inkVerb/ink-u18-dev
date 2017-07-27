@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=phpmyadmin
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${phpmyadmin}
+DISTVER="${phpmyadmin}"
 
 # Announce
 echo "Updating the phpMyAdmin package to v${DISTVER}..."

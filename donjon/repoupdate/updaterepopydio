@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=pydio
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${pydio}
+DISTVER="${pydio}"
 
 # Announce
 echo "Updating the Pydio package to v${DISTVER}..."

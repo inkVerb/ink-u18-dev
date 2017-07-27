@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=nextcloud
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${nextcloud}
+DISTVER="${nextcloud}"
 
 # Announce
 echo "Updating the NextCloud package to v${DISTVER}..."

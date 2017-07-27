@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=ampache
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${ampache}
+DISTVER="${ampache}"
 
 # Announce
 echo "Updating the Ampache package to v${DISTVER}..."

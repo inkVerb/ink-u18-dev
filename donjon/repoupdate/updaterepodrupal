@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=drupal
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${drupal}
+DISTVER="${drupal}"
 
 # Announce
 echo "Updating the Drupal package to v${DISTVER}..."

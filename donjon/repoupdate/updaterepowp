@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=wordpress
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${wordpress}
+DISTVER="${wordpress}"
 
 # Announce
 echo "Updating the WordPress package to the latest version..."

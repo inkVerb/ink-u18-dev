@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=net2ftp
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${net2ftp}
+DISTVER="${net2ftp}"
 
 # Announce
 echo "Updating the net2ftp package to v${DISTVER}..."

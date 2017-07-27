@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=suitecrm
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${suitecrm}
+DISTVER="${suitecrm}"
 
 # Announce
 echo "Updating the SuiteCRM package to v${DISTVER}..."

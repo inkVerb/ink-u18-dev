@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=fossil
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${fossil}
+DISTVER="${fossil}"
 
 # Announce
 echo "Updating the Fossil package to v${DISTVER}..."

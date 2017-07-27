@@ -11,7 +11,7 @@ set -e
 CVAPPNAME=roundcube
 # Include the repo versions
 . /var/local/ink/configs/inklists/repoverlist
-DISTVER=${roundcube}
+DISTVER="${roundcube}"
 
 # Announce
 echo "Updating the Roundcube package to v${DISTVER}..."
