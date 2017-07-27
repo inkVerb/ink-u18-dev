@@ -12,6 +12,7 @@ nextcloud="https://nextcloud.com/install/#instructions-server NOTE: SHA retrieve
 orangehrm="https://sourceforge.net/projects/orangehrm/files/stable/"
 phpmyadmin="https://www.phpmyadmin.net/ NOTE: use SHA256 from the page"
 postfixadmin="https://sourceforge.net/projects/postfixadmin/files/postfixadmin/"
+postfixadmingit="https://github.com/postfixadmin/postfixadmin" #for reference, perhaps to replace
 pydio="https://sourceforge.net/projects/ajaxplorer/files/pydio/stable-channel/ NOTE: use SHA1 for .tar.gz"
 roundcube="https://roundcube.net/download/"
 sonerezh="https://www.sonerezh.bzh/"
