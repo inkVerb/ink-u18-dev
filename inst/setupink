@@ -23,6 +23,7 @@ mv inst/configs-inst configs
 # Executable scripts
 mv donjon/wpaddsites/updatewpaddrepo-inst.sh donjon/wpaddsites/updatewpaddrepo.sh
 chmod +x donjon/wpaddsites/updatewpaddrepo.sh
+chmod +x knights/*
 
 # inkNet
 /var/local/verb/inknetmakeverberclient I_AM_INKER
