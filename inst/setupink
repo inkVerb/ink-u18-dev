@@ -56,7 +56,7 @@ ln -sfn /var/local/ink/configs/wpaddsites/wpadd.list /var/local/verb/tools/
 ln -sfn /var/local/ink/configs/wpaddsites/wpadd.human.list /var/local/verb/tools/
 
 # File permissions for configs
-chmod 640 -R /var/local/ink/configs
+chmod 751 -R /var/local/ink/configs
 
 # Link the inkget repo to the hostname
 ## Check that all is well
