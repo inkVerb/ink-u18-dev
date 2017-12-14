@@ -18,7 +18,7 @@ echo "Updating the Ampache package to v${DISTVER}..."
 cd /var/local/ink/repo
 
 # Get the package
-curl -LO https://github.com/ampache/ampache/releases/download/3.8.2/ampache-3.8.2_all.zip
+curl -LO https://github.com/ampache/ampache/releases/download/${DISTVER}/ampache-${DISTVER}_all.zip
 ## Check the hash
 CHECKSHA=$(shasum -a 256 ampache-${DISTVER}_all.zip)
 if [ "${CHECKSHA}" = "${ampachesha}  ampache-${DISTVER}_all.zip" ]; then
