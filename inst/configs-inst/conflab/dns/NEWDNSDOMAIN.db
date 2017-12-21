@@ -24,6 +24,7 @@ pop.hostdomain286.    IN  A   hostip286
 
 ; Aliase Default
 *.hostdomain286.   IN  CNAME   hostip286
+www.hostdomain286. IN  CNAME   hostip286
 email.hostdomain286.    IN  CNAME   hostip286
 
 ; TXT Record Defaults
