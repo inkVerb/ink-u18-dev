@@ -29,16 +29,16 @@ exit 44
 fi
 
 # Set it as the new package
-rm -f ${CVAPPNAME}.legacy.zip
-touch ${CVAPPNAME}.current.zip
-mv ${CVAPPNAME}.current.zip ${CVAPPNAME}.legacy.zip
+rm -f ${CVAPPNAME}.legacy.vtxz
+touch ${CVAPPNAME}.vtxz
+mv ${CVAPPNAME}.vtxz ${CVAPPNAME}.legacy.vtxz
 unzip net2ftp_v${DISTVER}.zip
 rm net2ftp_v${DISTVER}.zip
 cd net2ftp_v${DISTVER}
 mv files_to_upload ../${CVAPPNAME}
 cd ..
 rm -rf net2ftp_v${DISTVER}
-zip -r ${CVAPPNAME}.current.zip ${CVAPPNAME}
+/var/local/verb/serfs/vtxzin ${CVAPPNAME}; wait
 rm -rf ${CVAPPNAME}
 
 # Finish

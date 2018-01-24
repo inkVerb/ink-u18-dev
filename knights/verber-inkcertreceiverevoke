@@ -11,7 +11,7 @@ set -e
 # chmod u+s verber-inkcertreceiverevoke
 
 # How to use:
-## ./verber-inkcertreceiverevoke [filename (no .zip)] [domain] [Verber namespace]
+## ./verber-inkcertreceiverevoke [filename (no .vtxz)] [domain] [Verber namespace]
 
 
 FILENAME=$1

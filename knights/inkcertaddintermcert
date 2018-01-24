@@ -8,7 +8,7 @@ set -e
 ## Prereq: inkCert installcaroot (done on a local computer)
 ## Prereq: Verber inkcertsetcsr profile for ocsp cert domain
 ## Prereq: A domain for the CRL must exist in Apache, probably cert.SOMEDOMAIN.com via newdomain and addsubdomain, but it can be anything. See useage examples.
-## Prereq: local inkCert CA signintermcsr, and the zip file must be uploaded and at /etc/inkcert/ca/req/interm.zip (links in ~/ink/req or ~/boss/req)
+## Prereq: local inkCert CA signintermcsr, and the vtxz file must be uploaded and at /etc/inkcert/ca/req/interm.vtxz (links in ~/ink/req or ~/boss/req)
 
 
 # Thanks Jamie Nguyen! https://jamielinux.com/
@@ -57,10 +57,9 @@ if [ -f "/etc/inkcert/ca/ca-certs/ca.inkcert.cert.pem" ]; then
 rm -f /etc/inkcert/ca/ca-certs/ca.inkcert.cert.pem
 fi
 
-# Unzip and put everything where it goes
+# Unpack and put everything where it goes
 cd /etc/inkcert/ca/req
-unzip interm.zip
-rm -f interm.zip
+/var/local/verb/serfs/vtxzout interm; wait
 mv interm/ca.inkcert.cert.pem /etc/inkcert/ca/ca-certs/
 mv interm/*.cert.pem /etc/inkcert/ca/intermediate/certs/
 rm -rf interm

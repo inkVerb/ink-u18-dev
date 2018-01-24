@@ -11,7 +11,7 @@ set -e
 # chmod u+s verber-inkcertreceivecsr
 
 # How to use:
-## ./verber-inkcertreceivecsr [filename (no .zip)] [domain] [Verber namespace]
+## ./verber-inkcertreceivecsr [filename (no .vtxz)] [domain] [Verber namespace]
 
 
 FILENAME=$1

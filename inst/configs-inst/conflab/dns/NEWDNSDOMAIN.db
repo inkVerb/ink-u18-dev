@@ -20,7 +20,7 @@ smtp.hostdomain286.    IN  A   hostip286
 imap.hostdomain286.    IN  A   hostip286
 pop3.hostdomain286.    IN  A   hostip286
 pop2.hostdomain286.    IN  A   hostip286
-pop.hostdomain286.    IN  A   hostip286
+pop.hostdomain286.     IN  A   hostip286
 
 ; Aliase Default
 *.hostdomain286.   IN  CNAME   hostip286
@@ -29,7 +29,8 @@ email.hostdomain286.    IN  CNAME   hostip286
 
 ; TXT Record Defaults
 hostdomain286.   IN TXT "v=spf1 mx a ip4:hostip286 a:_spf.google.com ~all"
-inkdkim._domainkey
+inkdkim._domainkey.hostdomain286. inkdkim286
+_dmarc.hostdomain286.   IN TXT "v=DMARC1; p=none; rua=mailto:dmark@hostdomain286,mailto:dmark-host286-ink@inkisaverb.com; ruf=mailto:dmark@hostdomain286,mailto:dmark-host286-ink@hostdomain286; sp=reject; aspf=s; adkim=s; ri=86400"
 
 ; MX Record Defaults
 hostdomain286.   IN  MX  5   mail.hostdomain286.

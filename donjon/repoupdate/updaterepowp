@@ -34,12 +34,12 @@ exit 44
 fi
 
 # Set it as the new package
-rm -f ${CVAPPNAME}.legacy.zip
-touch ${CVAPPNAME}.current.zip
-mv ${CVAPPNAME}.current.zip ${CVAPPNAME}.legacy.zip
+rm -f ${CVAPPNAME}.legacy.vtxz
+touch ${CVAPPNAME}.vtxz
+mv ${CVAPPNAME}.vtxz ${CVAPPNAME}.legacy.vtxz
 tar -xvf latest.tar.gz
 rm latest.tar.gz
-zip -r ${CVAPPNAME}.current.zip ${CVAPPNAME}
+/var/local/verb/serfs/vtxzin ${CVAPPNAME}; wait
 rm -rf ${CVAPPNAME}
 
 # Finish

@@ -3,7 +3,7 @@
 set -e
 
 # This grants a certificate file based on a csr
-## This will result in a zip file with the Root, Intermediate, and site certs at /etc/inkcert/ca/req/DOMAIN.csr.pem
+## This will result in a vtxz file with the Root, Intermediate, and site certs at /etc/inkcert/ca/req/DOMAIN.csr.pem
 
 # NOTE: the file must be named in the manner: DOMAINNAME.csr.pem and in the /etc/inkcert/ca/req directory
 
@@ -35,7 +35,9 @@ chmod 444 ${DOMAIN}.cert.pem
 shred -f -x ${DOMAIN}.csr.pem
 cp -f ${DOMAIN}.cert.pem intermediate/certs/
 cd ..
-zip -r inkcert.${DOMAIN}.zip ${DOMAIN}
+/var/local/verb/serfs/vtxzin ${DOMAIN}
+wait
+mv ${DOMAIN}.vtxz inkcert.${DOMAIN}.vtxz
 shred -f -x ${DOMAIN}/${DOMAIN}.cert.pem
 rm -rf ${DOMAIN}
 
