@@ -16,6 +16,9 @@ Run, according to instructions: inst/setupverb
 exit 0
 fi
 
+# Include the Verber config
+. /var/local/verb/configs/sitenameip
+
 # Create configs
 cd /var/local/ink
 mv inst/configs-inst configs
