@@ -37,6 +37,7 @@ chmod +x knights/*
 /var/local/verb/serfs/inkcertdole-all-verbs
 
 # Block the repo from web listing
+mkdir -p /var/local/ink/repo
 echo "Options -Indexes" >> /var/local/ink/repo/.htaccess
 
 # Create inkNet Client links
