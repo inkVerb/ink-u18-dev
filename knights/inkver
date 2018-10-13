@@ -7,6 +7,6 @@ set -e
 # How to use:
 ## ./inkver
 
-. /var/local/ink/configs/inklists/inkerverno
+. /var/local/ink/conf/inklists/inkerverno
 echo "${VERNO}"
 

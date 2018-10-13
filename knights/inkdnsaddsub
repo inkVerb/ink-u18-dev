@@ -16,5 +16,5 @@ DNSDOMAIN=$2
 HOSTIP=$3
 
 # Echo the statement
-echo "${DNSSUBDOM}\.${DNSDOMAIN}    IN  A   ${HOSTIP}" >> /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
+echo "${DNSSUBDOM}\.${DNSDOMAIN}    IN  A   ${HOSTIP}" >> /var/local/ink/conf/inkdns/zones/${DNSDOMAIN}.db
 

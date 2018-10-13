@@ -25,7 +25,7 @@ set -e
 INFPROFILE=$1
 
 # Include config
-. /var/local/verb/configs/inkcert/csr-inf/csr.${INFPROFILE}.inf
+. /var/local/verb/conf/inkcert/csr-inf/csr.${INFPROFILE}.inf
 
 # Create Intermediate Key
 cd /etc/inkcert/ca

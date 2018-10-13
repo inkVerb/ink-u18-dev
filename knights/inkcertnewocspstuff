@@ -29,7 +29,7 @@ set -e
 ## Check if domain is present
 if [ -z "${1}" ]; then
 echo "You need to enter a csr profile and domain. Follow the instructions."
-exit 22
+exit 2
 fi
 ## Check if previously set
 if [ -f = "/etc/inkcert/ca/.root-interm.allset.inkcert" ]; then
@@ -48,7 +48,7 @@ OCSPPROFILE=$1
 OCSPDOMAIN=$2
 
 # Include the config
-. /var/local/verb/configs/inkcert/csr-inf/csr.${OCSPPROFILE}.inf
+. /var/local/verb/conf/inkcert/csr-inf/csr.${OCSPPROFILE}.inf
 
 # Key - OCSP
 cd /etc/inkcert/ca

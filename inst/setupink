@@ -17,11 +17,11 @@ exit 0
 fi
 
 # Include the Verber config
-. /var/local/verb/configs/sitenameip
+. /var/local/verb/conf/sitenameip
 
 # Create configs
 cd /var/local/ink
-mv inst/configs-inst configs
+mv inst/conf-inst conf
 
 # Executable scripts
 mv donjon/wpaddsites/updatewpaddrepo-inst.sh donjon/wpaddsites/updatewpaddrepo.sh
@@ -55,12 +55,12 @@ ln -sfn /var/local/ink/knights/verber-inkcertreceiverevoke /var/local/verb/tools
 #### repo
 ln -sfn /var/local/ink/repo /var/local/verb/tools/
 #### wpadd machine list
-ln -sfn /var/local/ink/configs/wpaddsites/wpadd.list /var/local/verb/tools/
+ln -sfn /var/local/ink/conf/wpaddsites/wpadd.list /var/local/verb/tools/
 #### wpadd human list
-ln -sfn /var/local/ink/configs/wpaddsites/wpadd.human.list /var/local/verb/tools/
+ln -sfn /var/local/ink/conf/wpaddsites/wpadd.human.list /var/local/verb/tools/
 
 # File permissions for configs
-chmod 751 -R /var/local/ink/configs
+chmod 751 -R /var/local/ink/conf
 
 # Link the inkget repo to the hostname
 ## Check that all is well
@@ -84,7 +84,7 @@ exit 22
 fi
 
 # Start the Inker cron entries
-cp /var/local/ink/configs/inkcron /etc/cron.d/inker
+cp /var/local/ink/conf/inkcron /etc/cron.d/inker
 
 # Finish
 echo "All set.

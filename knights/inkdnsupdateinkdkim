@@ -15,5 +15,5 @@ DNSDOMAIN=$1
 INKDKIMST=$2
 
 # Echo the statement
-sed i- "s/inkdkim\._domainkey.*/${INKDKIMST}" /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
+sed i- "s/inkdkim\._domainkey.*/${INKDKIMST}" /var/local/ink/conf/inkdns/zones/${DNSDOMAIN}.db
 

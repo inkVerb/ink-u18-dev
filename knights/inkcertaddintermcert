@@ -33,7 +33,7 @@ CADOMAIN=$1
 ## If domain is present
 if [ -z "${1}" ]; then
 echo "You need to enter a domain for the interm CA."
-exit 22
+exit 2
 fi
 ## Check if previously set
 if [ -f = "/etc/inkcert/ca/.root-interm.allset.inkcert" ]; then

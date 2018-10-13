@@ -20,11 +20,11 @@ DNSSERVERDOM=$1
 DNSIDNO=$2
 
 # Check if installed
-if [ -f /var/local/ink/configs/inkdns/inkdnsstatus ]; then
-. /var/local/ink/configs/inkdns/inkdnsstatus
+if [ -f /var/local/ink/conf/inkdns/inkdnsstatus ]; then
+. /var/local/ink/conf/inkdns/inkdnsstatus
  if [ "${INKDNSSTAT}" = "INSTALLED" ]; then
 echo "inkDNS already installed."
-exit 22
+exit 2
  fi
 fi
 
@@ -36,24 +36,24 @@ cd /etc/bind
 mv named.conf.options named.conf.options.original
 
 # New configs
-mkdir /var/local/ink/configs/inkdns
-cp /var/local/ink/configs/conflab/dns/NEWDNSDOMAIN.db /var/local/ink/configs/inkdns/NEW-DNS.db
-cp /var/local/ink/configs/conflab/dns/named.conf.options /var/local/ink/configs/inkdns/
-chown bind:bind /var/local/ink/configs/inkdns/named.conf.options
-ln -sfn /var/local/ink/configs/inkdns/named.conf.options /etc/bind
+mkdir /var/local/ink/conf/inkdns
+cp /var/local/ink/conf/conflab/dns/NEWDNSDOMAIN.db /var/local/ink/conf/inkdns/NEW-DNS.db
+cp /var/local/ink/conf/conflab/dns/named.conf.options /var/local/ink/conf/inkdns/
+chown bind:bind /var/local/ink/conf/inkdns/named.conf.options
+ln -sfn /var/local/ink/conf/inkdns/named.conf.options /etc/bind
 
 # Create the directory
 mkdir /var/log/bind9
 chown bind:bind /var/log/bind9
 
 # Create the directories in configs
-mkdir /var/local/ink/configs/inkdns/zones
-chown bind:bind /var/local/ink/configs/inkdns/zones
-ln -s /var/local/ink/configs/inkdns/zones /etc/bind
+mkdir /var/local/ink/conf/inkdns/zones
+chown bind:bind /var/local/ink/conf/inkdns/zones
+ln -s /var/local/ink/conf/inkdns/zones /etc/bind
 
 # Replace and set domain in Bind config files
-sed -i "s/DNSDOMAIN286/${DNSSERVERDOM}/g" /var/local/ink/configs/inkdns/NEW-DNS.db
-sed -i "s/DNSID286/ns${DNSIDNO}/g" /var/local/ink/configs/inkdns/NEW-DNS.db
+sed -i "s/DNSDOMAIN286/${DNSSERVERDOM}/g" /var/local/ink/conf/inkdns/NEW-DNS.db
+sed -i "s/DNSID286/ns${DNSIDNO}/g" /var/local/ink/conf/inkdns/NEW-DNS.db
 
 # Allow the port
 ufw allow 53
@@ -66,7 +66,7 @@ ufw allow bind9
 echo "#!/bin/sh
 
 INKDNSSTAT=INSTALLED
-" > /var/local/ink/configs/inkdns/inkdnsstatus
+" > /var/local/ink/conf/inkdns/inkdnsstatus
 
 # Finish
 echo "inkDNS installed."

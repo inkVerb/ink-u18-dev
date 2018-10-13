@@ -10,7 +10,7 @@ set -e
 
 
 # Include the config
-. /var/local/ink/configs/inkerinfo
+. /var/local/ink/conf/inkerinfo
 
 # Download and unpack the latest checked version from the Inkver repo
 cd /var/local/ink/

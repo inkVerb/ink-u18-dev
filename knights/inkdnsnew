@@ -28,10 +28,10 @@ echo "zone \"${DNSDOMAIN}\" {
 " >> /etc/bind/named.conf
 
 # Copy the config
-cp /var/local/ink/configs/inkdns/NEW-DNS.db /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
+cp /var/local/ink/conf/inkdns/NEW-DNS.db /var/local/ink/conf/inkdns/zones/${DNSDOMAIN}.db
 
 # Replace variables
-sed -i "s/hostdomain286/${DNSDOMAIN}/g"  /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
-sed -i "s/hostip286/${HOSTIP}/g"  /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
-sed -i "s/inkdkim\._domainkey.*/${INKDKIM}/g"  /var/local/ink/configs/inkdns/zones/${DNSDOMAIN}.db
+sed -i "s/hostdomain286/${DNSDOMAIN}/g"  /var/local/ink/conf/inkdns/zones/${DNSDOMAIN}.db
+sed -i "s/hostip286/${HOSTIP}/g"  /var/local/ink/conf/inkdns/zones/${DNSDOMAIN}.db
+sed -i "s/inkdkim\._domainkey.*/${INKDKIM}/g"  /var/local/ink/conf/inkdns/zones/${DNSDOMAIN}.db
 
