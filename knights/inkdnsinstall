@@ -19,18 +19,6 @@ set -e
 DNSSERVERDOM=$1
 DNSIDNO=$2
 
-# Check if installed
-if [ -f /var/local/ink/conf/inkdns/inkdnsstatus ]; then
-. /var/local/ink/conf/inkdns/inkdnsstatus
- if [ "${INKDNSSTAT}" = "INSTALLED" ]; then
-echo "inkDNS already installed."
-exit 2
- fi
-fi
-
-# Install Bind
-apt install -y bind9
-
 # Backup settings
 cd /etc/bind
 mv named.conf.options named.conf.options.original
