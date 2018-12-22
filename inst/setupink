@@ -21,7 +21,7 @@ fi
 
 # Create configs
 cd /var/local/ink
-mv inst/conf-inst conf
+mv inst/conf conf
 
 # Executable scripts
 mv donjon/wpaddsites/updatewpaddrepo-inst.sh donjon/wpaddsites/updatewpaddrepo.sh
@@ -29,12 +29,12 @@ chmod +x donjon/wpaddsites/updatewpaddrepo.sh
 chmod +x knights/*
 
 # inkNet
-/var/local/verb/inknetmakeverberclient I_AM_INKER
-/var/local/verb/inknetinstallca
+#/var/local/verb/inknetmakeverberclient I_AM_INKER
+#/var/local/verb/inknetinstallca
 
 # inkCert
-/var/local/verb/serfs/inkcertinstall
-/var/local/verb/serfs/inkcertdole-all-verbs
+#/var/local/verb/serfs/inkcertinstall
+#/var/local/verb/serfs/inkcertdole-all-verbs
 
 # Block the repo from web listing
 mkdir -p /var/local/ink/repo
@@ -85,10 +85,10 @@ fi
 
 # Start the Inker cron entries
 cp /var/local/ink/conf/inkcron /etc/cron.d/inker
+chmod 0644 /etc/cron.d/inker
 
 # Finish
 echo "All set.
 This Inker is ready to ink and get Verbers inking.
 
 Note that repos and cert authorities are not served until you install inkNet."
-
