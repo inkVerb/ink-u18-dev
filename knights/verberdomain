@@ -1,0 +1,49 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+#set -e
+
+# This adds a Verber to an existing Verber's account on this Inker
+
+# How to use:
+## ./verberdomain [ Verber type - "verb" or "dmod" ] [ vname OR mod-domain.tld ] [ domain.tld ] [ Verber tld - if not "ink" ]
+
+# Eg:
+## ./verberstatus verb name poetryiscode.com
+## ./verberstatus verb name poetryiscode.com kiwi
+## ./verberstatus dmod poetryiscode.com inkisaverb. blue
+
+
+VTYPE="$1"
+VNAME="$2"
+VDOMAIN="$3"
+VTLD="$4"
+
+# Check if Verber account exists
+if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
+  echo "That Verber is not setup. Doing nothing."
+  exit 0; fi
+
+# Check if multiple hosting is allowed
+if [ "${VTLD}" != "ink" ]; then
+  . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/nfo.status
+  if [ "${VSTATUS}" = "solo" ]; then
+  echo "Verber does not allow hosting on multiple servers, using \"ink\" instead of \"${VTLD}\"..."
+  VTLD="ink"
+  elif [ "${VSTATUS}" = "multi" ] && [ -f "/var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${VTLD}" ]; then
+  echo "Verber allows hosting on multiple servers, using \"${VTLD}\"..."
+  else "Something's wrong with the tld \"${VTLD}\", using \"ink\" instead..."
+  VTLD="ink"
+  fi
+fi
+
+# Include the config
+. /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${VTLD}
+
+# Set the status
+echo "verberTLD=\"${VTLD}\"
+domIP4=\"${VIP4}\"
+domIP6=\"${VIP6}\"
+domEXPIPV6=\"${VERBEREXPIPV6}\"
+domARPAIP4=\"${VERBERARPAIP4}\"
+domARPAIP6=\"${VERBERARPAIP6}\"
+" > /var/local/ink/verbers/v.${VTYPE}.${VNAME}/domain.${VDOMAIN}

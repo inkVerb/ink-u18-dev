@@ -9,15 +9,32 @@
 
 # Include the configs
 . /var/local/verb/conf/sitenameip
+
+
+if [ -f "/var/local/verb/conf/inkdns/inkdnsstatus" ]; then
 . /var/local/verb/conf/inkdns/inkdnsstatus
+else
+echo "inkDNS not installed, run the inkdnsinstall serf on this Verber first."
+exit 0; fi
 
 if [ "$INKDNSSTAT" != "INSTALLED" ]; then
 echo "inkDNS not installed, run the inkdnsinstall serf on this Verber first."
 exit 0; fi
 
 # Create structure
-mkdir -p /var/local/ink/conf/inkdns/zones-inker
+mkdir -p /etc/bind/verbers
+chown -R bind:bind /etc/bind/verbers
+chmod -R 644 /etc/bind/verbers
+mkdir -p /etc/bind/zones-inker
+chown -R bind:bind /etc/bind/zones-inker
+chmod -R 644 /etc/bind/zones-inker
 
 # include the Inker file
 echo '// Below added by #inkVerbInker-inkDNS' >> /etc/bind/named.conf.local
 echo 'include "/etc/bind/named.conf.inker";' >> /etc/bind/named.conf.local
+
+# Config
+echo "#!/bin/sh
+
+INKDNSINKERSTAT=INSTALLED
+" > /var/local/ink/conf/inkdns/inkdnsstatus

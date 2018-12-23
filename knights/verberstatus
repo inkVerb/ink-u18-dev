@@ -1,0 +1,25 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+#set -e
+
+# This sets the status of an existing Verber on this Inker
+
+# How to use:
+## ./verberstatus [ Verber type - "verb" or "dmod" ] [ vname OR mod-domain.tld ] [ STATUS - "solo" OR "multi" OR "dead" ]
+
+# Eg:
+## ./verberstatus verb name solo
+## ./verberstatus dmod poetryiscode.com multi
+
+
+VTYPE="$1"
+VNAME="$2"
+VSTAT="$3"
+
+# Check if exists
+if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
+  echo "That Verber is not setup. Doing nothing."
+  exit 0; fi
+
+# Set the status
+echo "VSTATUS=\"${VSTAT}\"" > /var/local/ink/verbers/v.${VTYPE}.${VNAME}/nfo.status

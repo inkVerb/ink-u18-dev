@@ -1,0 +1,148 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+#set -e
+
+# This resets a complete list of a single remote inkDNS domains Verber account's slave records in the Bind9 config file: /etc/bind/verbers/named.conf.VERBERACCOUNT.verbacct
+
+# How to use:
+## ./inkdnsinkrefreshverber [ Verber type - "verb" or "dmod" ] [ vname OR mod-domain.tld ]
+
+
+# Install status
+if [ -f "/var/local/ink/conf/inkdns/inkdnsstatus" ]; then
+. /var/local/ink/conf/inkdns/inkdnsstatus
+  if [ "${INKDNSINKERSTAT}" = "INSTALLED" ]; then
+
+# Account status
+if [ ! -f "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
+echo "The Verber \"${VNAME}\" type \"${VTYPE}\" does not exist. Doing nothing."
+exit 0; fi
+
+    # Refresh the inkDNS domain list file
+    rm -f /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    cp /var/local/ink/conf/inkdns/named.conf.TYPE.ACCOUNT.verbacct /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    chown bind:bind /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ## Each verb tld
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/nfo.base
+
+    ### email
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${emailVERBER}
+    sed -i "s/emaildomainZone/${emailURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/emaildomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/emaildomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/emaildomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/emaildomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### city
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${cityVERBER}
+    sed -i "s/citydomainZone/${cityURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/citydomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/citydomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/citydomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/citydomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### one
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${oneVERBER}
+    sed -i "s/onedomainZone/${oneURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/onedomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/onedomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/onedomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/onedomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### ink
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${inkVERBER}
+    sed -i "s/inkdomainZone/${inkURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/inkdomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/inkdomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/inkdomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/inkdomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### blue
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${blueVERBER}
+    sed -i "s/bluedomainZone/${blueURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/bluedomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/bluedomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/bluedomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/bluedomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### vip
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${vipVERBER}
+    sed -i "s/vipdomainZone/${vipURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/vipdomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/vipdomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/vipdomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/vipdomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### kiwi
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${kiwiVERBER}
+    sed -i "s/kiwidomainZone/${kiwiURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/kiwidomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/kiwidomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/kiwidomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/kiwidomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### cash
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${cashVERBER}
+    sed -i "s/cashdomainZone/${cashURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/cashdomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/cashdomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/cashdomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/cashdomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### pink
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${pinkVERBER}
+    sed -i "s/pinkdomainZone/${pinkURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/pinkdomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/pinkdomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/pinkdomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/pinkdomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### red
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${redVERBER}
+    sed -i "s/reddomainZone/${redURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/reddomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/reddomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/reddomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/reddomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    ### rocks
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${rocksVERBER}
+    sed -i "s/rocksdomainZone/${rocksURI}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/rocksdomIP6/${VERBERIPV4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/rocksdomIP4/${VERBERIPV6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/rocksdomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/rocksdomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
+    # Each domain
+    cd /var/local/ink/verbers/v.${VTYPE}.${VNAME}
+    for domainNFO in domain.*; do
+      domainZone="$(echo ${domainNFO} | sed 's/tld\.//' )"
+      . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/${domainNFO}
+      . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${verberTLD}
+      echo "zone \"${domainZone}\" {
+type slave;
+masters { $domIP6; $domIP4; };
+file \"/etc/bind/zones-inker/db.${domainZone}\";
+};
+
+zone \"${domARPAIP4}\" {
+type slave;
+masters { $domIP4; };
+file \"/etc/bind/zones-inker/nv.${domainZone}\";
+allow-query { any; };
+};
+
+zone \"${domARPAIP6}\" {
+type slave;
+masters { $domIP6; };
+file \"/etc/bind/zones-inker/nv.${domainZone}\";
+allow-query { any; };
+};
+
+" >> /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    done
+  else echo "inkDNS not installed, run inkdnsinstall first."; exit 0
+  fi
+else echo "inkDNS not installed, run inkdnsinstall first."; exit 0
+fi

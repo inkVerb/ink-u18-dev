@@ -1,0 +1,28 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+#set -e
+
+# This resets a complete list of all remote inkDNS Verber accounts for slave records in the Bind9 config file: /etc/bind/named.conf.inker
+
+# How to use:
+## ./inkdnsinkrefreshinker
+
+
+if [ -f "/var/local/ink/conf/inkdns/inkdnsstatus" ]; then
+. /var/local/ink/conf/inkdns/inkdnsstatus
+  if [ "${INKDNSINKERSTAT}" = "INSTALLED" ]; then
+
+    # inkDNS domain list file
+    rm -f /etc/bind/named.conf.inker
+    touch /etc/bind/named.conf.inker
+    echo '// inkVerb-inkDNS domain list file, managed automatically, edits will likely be deleted' >> /etc/bind/named.conf.inker
+    chown bind:bind /etc/bind/named.conf.inker
+    chmod 644 /etc/bind/named.conf.inker
+    cd /etc/bind/verbers
+    for namedVAccount in named.conf.*.*.verbacct; do
+      echo 'include "/etc/bind/namedVAccount";' >> /etc/bind/named.conf.inker
+    done
+  else echo "inkDNS not installed, run inkdnsinkinstall first."; exit 0
+  fi
+else echo "inkDNS not installed, run inkdnsinkinstall first."; exit 0
+fi
