@@ -2,11 +2,16 @@
 #inkVerbKnight! verb.ink
 #set -e
 
-# This resets a complete list of a single remote inkDNS domains Verber account's slave records in the Bind9 config file: /etc/bind/verbers/named.conf.VERBERACCOUNT.verbacct
+# This resets a complete list of a single remote inkDNS verm/domain-mod Verber account's base domain and all it's hosted domain slave records in the Bind9 config file: /etc/bind/verbers/named.conf.VERBERACCOUNT.verbacct
+## This only processes one, single Verber "name" account, but all domains for its DNS
+## Eg, this will set all name.verb.ink, name.verb.emial, name.verb.blue, etc, and other domains (added to this Inker) records, but only for the "name" Verb namespace, also with a domain-mod
 
 # How to use:
 ## ./inkdnsinkrefreshverber [ Verber type - "verb" or "dmod" ] [ vname OR mod-domain.tld ]
 
+# Eg:
+## ./inkdnsinkrefreshverber verb name
+## ./inkdnsinkrefreshverber dmod poetryiscode.com
 
 # Install status
 if [ -f "/var/local/ink/conf/inkdns/inkdnsstatus" ]; then
@@ -114,7 +119,9 @@ exit 0; fi
     sed -i "s/rocksdomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/rocksdomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
-    # Each domain
+    echo "Base Verber records updated."
+
+    ## Each domain
     cd /var/local/ink/verbers/v.${VTYPE}.${VNAME}
     for domainNFO in domain.*; do
       domainZone="$(echo ${domainNFO} | sed 's/tld\.//' )"
@@ -125,23 +132,22 @@ type slave;
 masters { $domIP6; $domIP4; };
 file \"/etc/bind/zones-inker/db.${domainZone}\";
 };
-
 zone \"${domARPAIP4}\" {
 type slave;
 masters { $domIP4; };
 file \"/etc/bind/zones-inker/nv.${domainZone}\";
 allow-query { any; };
 };
-
 zone \"${domARPAIP6}\" {
 type slave;
 masters { $domIP6; };
 file \"/etc/bind/zones-inker/nv.${domainZone}\";
 allow-query { any; };
 };
-
 " >> /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    echo "${domainZone} records updated."
     done
+    
   else echo "inkDNS not installed, run inkdnsinstall first."; exit 0
   fi
 else echo "inkDNS not installed, run inkdnsinstall first."; exit 0

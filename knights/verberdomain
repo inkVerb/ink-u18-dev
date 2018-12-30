@@ -8,9 +8,9 @@
 ## ./verberdomain [ Verber type - "verb" or "dmod" ] [ vname OR mod-domain.tld ] [ domain.tld ] [ Verber tld - if not "ink" ]
 
 # Eg:
-## ./verberstatus verb name poetryiscode.com
-## ./verberstatus verb name poetryiscode.com kiwi
-## ./verberstatus dmod poetryiscode.com inkisaverb. blue
+## ./verberdomain verb name poetryiscode.com
+## ./verberdomain verb name poetryiscode.com kiwi
+## ./verberdomain dmod poetryiscode.com inkisaverb. blue
 
 
 VTYPE="$1"
@@ -22,6 +22,11 @@ VTLD="$4"
 if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
   echo "That Verber is not setup. Doing nothing."
   exit 0; fi
+
+# Default tld value
+if [ -z "$4" ]; then
+  VTLD="ink"
+fi
 
 # Check if multiple hosting is allowed
 if [ "${VTLD}" != "ink" ]; then
@@ -41,8 +46,8 @@ fi
 
 # Set the status
 echo "verberTLD=\"${VTLD}\"
-domIP4=\"${VIP4}\"
-domIP6=\"${VIP6}\"
+domIP4=\"${VERBERIPV4}\"
+domIP6=\"${VERBERIPV6}\"
 domEXPIPV6=\"${VERBEREXPIPV6}\"
 domARPAIP4=\"${VERBERARPAIP4}\"
 domARPAIP6=\"${VERBERARPAIP6}\"
