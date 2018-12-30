@@ -24,8 +24,6 @@ cd /var/local/ink
 mv inst/conf conf
 
 # Executable scripts
-mv donjon/wpaddsites/updatewpaddrepo-inst.sh donjon/wpaddsites/updatewpaddrepo.sh
-chmod ug+x donjon/wpaddsites/updatewpaddrepo.sh
 chmod ug+x knights/*
 
 # inkNet
