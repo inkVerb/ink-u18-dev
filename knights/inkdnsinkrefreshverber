@@ -13,13 +13,17 @@
 ## ./inkdnsinkrefreshverber verb name
 ## ./inkdnsinkrefreshverber dmod poetryiscode.com
 
+
+VTYPE="$1"
+VNAME="$2"
+
 # Install status
 if [ -f "/var/local/ink/conf/inkdns/inkdnsstatus" ]; then
 . /var/local/ink/conf/inkdns/inkdnsstatus
   if [ "${INKDNSINKERSTAT}" = "INSTALLED" ]; then
 
 # Account status
-if [ ! -f "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
+if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
 echo "The Verber \"${VNAME}\" type \"${VTYPE}\" does not exist. Doing nothing."
 exit 0; fi
 
@@ -119,7 +123,8 @@ exit 0; fi
     sed -i "s/rocksdomARPAIP4/${VERBERARPAIP4}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/rocksdomARPAIP6/${VERBERARPAIP6}/g" /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
-    echo "Base Verber records updated."
+    ### Wrap-up
+    echo "Base Verber records updated for ${VTYPE} ${VNAME}."
 
     ## Each domain
     cd /var/local/ink/verbers/v.${VTYPE}.${VNAME}
@@ -127,7 +132,8 @@ exit 0; fi
       domainZone="$(echo ${domainNFO} | sed 's/tld\.//' )"
       . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/${domainNFO}
       . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${verberTLD}
-      echo "zone \"${domainZone}\" {
+      echo "// ${domainZone}
+zone \"${domainZone}\" {
 type slave;
 masters { $domIP6; $domIP4; };
 file \"/etc/bind/zones-inker/db.${domainZone}\";
@@ -145,9 +151,9 @@ file \"/etc/bind/zones-inker/nv.${domainZone}\";
 allow-query { any; };
 };
 " >> /etc/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    echo "${domainZone} records updated."
+    echo "${domainZone} records updated for ${VTYPE} ${VNAME}."
     done
-    
+
   else echo "inkDNS not installed, run inkdnsinstall first."; exit 0
   fi
 else echo "inkDNS not installed, run inkdnsinstall first."; exit 0

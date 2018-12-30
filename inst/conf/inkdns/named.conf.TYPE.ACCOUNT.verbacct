@@ -6,14 +6,12 @@ type slave;
 masters { emaildomIP6; emaildomIP4; };
 file "/etc/bind/zones-inker/db.emaildomainZone";
 };
-
 zone "emaildomARPAIP4" {
 type slave;
 masters { emaildomIP4; };
 file "/etc/bind/zones-inker/nv.emaildomainZone";
 allow-query { any; };
 };
-
 zone "emaildomARPAIP6" {
 type slave;
 masters { emaildomIP6; };
@@ -27,14 +25,12 @@ type slave;
 masters { citydomIP6; citydomIP4; };
 file "/etc/bind/zones-inker/db.citydomainZone";
 };
-
 zone "citydomARPAIP4" {
 type slave;
 masters { citydomIP4; };
 file "/etc/bind/zones-inker/nv.citydomainZone";
 allow-query { any; };
 };
-
 zone "citydomARPAIP6" {
 type slave;
 masters { citydomIP6; };
@@ -48,14 +44,12 @@ type slave;
 masters { onedomIP6; onedomIP4; };
 file "/etc/bind/zones-inker/db.onedomainZone";
 };
-
 zone "onedomARPAIP4" {
 type slave;
 masters { onedomIP4; };
 file "/etc/bind/zones-inker/nv.onedomainZone";
 allow-query { any; };
 };
-
 zone "onedomARPAIP6" {
 type slave;
 masters { onedomIP6; };
@@ -69,14 +63,12 @@ type slave;
 masters { ink domIP6; ink domIP4; };
 file "/etc/bind/zones-inker/db.ink domainZone";
 };
-
 zone "ink domARPAIP4" {
 type slave;
 masters { ink domIP4; };
 file "/etc/bind/zones-inker/nv.ink domainZone";
 allow-query { any; };
 };
-
 zone "ink domARPAIP6" {
 type slave;
 masters { ink domIP6; };
@@ -90,14 +82,12 @@ type slave;
 masters { bluedomIP6; bluedomIP4; };
 file "/etc/bind/zones-inker/db.bluedomainZone";
 };
-
 zone "bluedomARPAIP4" {
 type slave;
 masters { bluedomIP4; };
 file "/etc/bind/zones-inker/nv.bluedomainZone";
 allow-query { any; };
 };
-
 zone "bluedomARPAIP6" {
 type slave;
 masters { bluedomIP6; };
@@ -111,14 +101,12 @@ type slave;
 masters { vipdomIP6; vipdomIP4; };
 file "/etc/bind/zones-inker/db.vipdomainZone";
 };
-
 zone "vipdomARPAIP4" {
 type slave;
 masters { vipdomIP4; };
 file "/etc/bind/zones-inker/nv.vipdomainZone";
 allow-query { any; };
 };
-
 zone "vipdomARPAIP6" {
 type slave;
 masters { vipdomIP6; };
@@ -132,14 +120,12 @@ type slave;
 masters { kiwidomIP6; kiwidomIP4; };
 file "/etc/bind/zones-inker/db.kiwidomainZone";
 };
-
 zone "kiwidomARPAIP4" {
 type slave;
 masters { kiwidomIP4; };
 file "/etc/bind/zones-inker/nv.kiwidomainZone";
 allow-query { any; };
 };
-
 zone "kiwidomARPAIP6" {
 type slave;
 masters { kiwidomIP6; };
@@ -153,14 +139,12 @@ type slave;
 masters { cashdomIP6; cashdomIP4; };
 file "/etc/bind/zones-inker/db.cashdomainZone";
 };
-
 zone "cashdomARPAIP4" {
 type slave;
 masters { cashdomIP4; };
 file "/etc/bind/zones-inker/nv.cashdomainZone";
 allow-query { any; };
 };
-
 zone "cashdomARPAIP6" {
 type slave;
 masters { cashdomIP6; };
@@ -174,14 +158,12 @@ type slave;
 masters { pinkdomIP6; pinkdomIP4; };
 file "/etc/bind/zones-inker/db.pinkdomainZone";
 };
-
 zone "pinkdomARPAIP4" {
 type slave;
 masters { pinkdomIP4; };
 file "/etc/bind/zones-inker/nv.pinkdomainZone";
 allow-query { any; };
 };
-
 zone "pinkdomARPAIP6" {
 type slave;
 masters { pinkdomIP6; };
@@ -195,14 +177,12 @@ type slave;
 masters { reddomIP6; reddomIP4; };
 file "/etc/bind/zones-inker/db.reddomainZone";
 };
-
 zone "reddomARPAIP4" {
 type slave;
 masters { reddomIP4; };
 file "/etc/bind/zones-inker/nv.reddomainZone";
 allow-query { any; };
 };
-
 zone "reddomARPAIP6" {
 type slave;
 masters { reddomIP6; };
@@ -216,18 +196,18 @@ type slave;
 masters { rocksdomIP6; rocksdomIP4; };
 file "/etc/bind/zones-inker/db.rocksdomainZone";
 };
-
 zone "rocksdomARPAIP4" {
 type slave;
 masters { rocksdomIP4; };
 file "/etc/bind/zones-inker/nv.rocksdomainZone";
 allow-query { any; };
 };
-
 zone "rocksdomARPAIP6" {
 type slave;
 masters { rocksdomIP6; };
 file "/etc/bind/zones-inker/nv.rocksdomainZone";
 allow-query { any; };
 };
+
+// Hosted domains
 

@@ -20,7 +20,7 @@ if [ -f "/var/local/ink/conf/inkdns/inkdnsstatus" ]; then
     chmod 644 /etc/bind/named.conf.inker
     cd /etc/bind/verbers
     for namedVAccount in named.conf.*.*.verbacct; do
-      echo 'include "/etc/bind/namedVAccount";' >> /etc/bind/named.conf.inker
+      echo "include \"/etc/bind/verbers/${namedVAccount}\";" >> /etc/bind/named.conf.inker
     done
   else echo "inkDNS not installed, run inkdnsinkinstall first."; exit 0
   fi
