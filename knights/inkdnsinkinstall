@@ -22,16 +22,18 @@ echo "inkDNS not installed, run the inkdnsinstall serf on this Verber first."
 exit 0; fi
 
 # Create structure
-mkdir -p /etc/bind/verbers
-chown -R bind:bind /etc/bind/verbers
-chmod -R 644 /etc/bind/verbers
-mkdir -p /etc/bind/zones-inker
-chown -R bind:bind /etc/bind/zones-inker
-chmod -R 644 /etc/bind/zones-inker
+mkdir -p /var/cache/bind/verbers
+chown -R bind:bind /var/cache/bind/verbers
+chmod -R 644 /var/cache/bind/verbers
+mkdir -p /var/cache/bind/zones-inker
+chown -R bind:bind /var/cache/bind/zones-inker
+chmod -R 644 /var/cache/bind/zones-inker
+
+## DEV: FYI apparmor permissions are here: /etc/apparmor.d/usr.sbin.named
 
 # include the Inker file
-echo '// Below added by #inkVerbInker-inkDNS' >> /etc/bind/named.conf.local
-echo 'include "/etc/bind/named.conf.inker";' >> /etc/bind/named.conf.local
+echo '// Below added by #inkVerbInker-inkDNS' >> /var/cache/bind/named.conf.local
+echo 'include "/var/cache/bind/named.conf.inker";' >> /var/cache/bind/named.conf.local
 
 # Config
 echo "#!/bin/sh
