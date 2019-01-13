@@ -1,213 +1,45 @@
 // inkVerb-inkDNS ink domain list file, managed automatically, edits will likely be deleted
 
+// ## DEV NOTE: There is currently no replacement system for "VTYPE.VNAME.TLD" from inkdnsinkrefreshverber, but there needs to be
+// ## DEV NOTE: These two IP entries need to be added on a per-TLD basis based on verbers/v.TYPE.NAME/* configs
+// IP4
+zone "verberARPAIP4" { type slave; masters { verberIP4; }; file "/etc/bind/zones-inker/nv.VTYPE.VNAME.TLD";allow-query { any; }; };
+
+// IP6
+zone "verberARPAIP6" { type slave; masters { verberIP6; }; file "/etc/bind/zones-inker/nv.VTYPE.VNAME.TLD";allow-query { any; }; };
+
 // email
-zone "emaildomainZone" {
-type slave;
-masters { emaildomIP6; emaildomIP4; };
-file "/etc/bind/zones-inker/db.emaildomainZone";
-};
-zone "emaildomARPAIP4" {
-type slave;
-masters { emaildomIP4; };
-file "/etc/bind/zones-inker/nv.emaildomainZone";
-allow-query { any; };
-};
-zone "emaildomARPAIP6" {
-type slave;
-masters { emaildomIP6; };
-file "/etc/bind/zones-inker/nv.emaildomainZone";
-allow-query { any; };
-};
+zone "emaildomainZone" { type slave; masters { emaildomIP6; emaildomIP4; }; file "/etc/bind/zones-inker/db.emaildomainZone"; };
 
 // city
-zone "citydomainZone" {
-type slave;
-masters { citydomIP6; citydomIP4; };
-file "/etc/bind/zones-inker/db.citydomainZone";
-};
-zone "citydomARPAIP4" {
-type slave;
-masters { citydomIP4; };
-file "/etc/bind/zones-inker/nv.citydomainZone";
-allow-query { any; };
-};
-zone "citydomARPAIP6" {
-type slave;
-masters { citydomIP6; };
-file "/etc/bind/zones-inker/nv.citydomainZone";
-allow-query { any; };
-};
+zone "citydomainZone" { type slave; masters { citydomIP6; citydomIP4; }; file "/etc/bind/zones-inker/db.citydomainZone"; };
 
 // one
-zone "onedomainZone" {
-type slave;
-masters { onedomIP6; onedomIP4; };
-file "/etc/bind/zones-inker/db.onedomainZone";
-};
-zone "onedomARPAIP4" {
-type slave;
-masters { onedomIP4; };
-file "/etc/bind/zones-inker/nv.onedomainZone";
-allow-query { any; };
-};
-zone "onedomARPAIP6" {
-type slave;
-masters { onedomIP6; };
-file "/etc/bind/zones-inker/nv.onedomainZone";
-allow-query { any; };
-};
+zone "onedomainZone" { type slave; masters { onedomIP6; onedomIP4; }; file "/etc/bind/zones-inker/db.onedomainZone"; };
 
 // ink
-zone "ink domainZone" {
-type slave;
-masters { ink domIP6; ink domIP4; };
-file "/etc/bind/zones-inker/db.ink domainZone";
-};
-zone "ink domARPAIP4" {
-type slave;
-masters { ink domIP4; };
-file "/etc/bind/zones-inker/nv.ink domainZone";
-allow-query { any; };
-};
-zone "ink domARPAIP6" {
-type slave;
-masters { ink domIP6; };
-file "/etc/bind/zones-inker/nv.ink domainZone";
-allow-query { any; };
-};
+zone "ink domainZone" { type slave; masters { ink domIP6; ink domIP4; }; file "/etc/bind/zones-inker/db.ink domainZone"; };
 
 // blue
-zone "bluedomainZone" {
-type slave;
-masters { bluedomIP6; bluedomIP4; };
-file "/etc/bind/zones-inker/db.bluedomainZone";
-};
-zone "bluedomARPAIP4" {
-type slave;
-masters { bluedomIP4; };
-file "/etc/bind/zones-inker/nv.bluedomainZone";
-allow-query { any; };
-};
-zone "bluedomARPAIP6" {
-type slave;
-masters { bluedomIP6; };
-file "/etc/bind/zones-inker/nv.bluedomainZone";
-allow-query { any; };
-};
+zone "bluedomainZone" { type slave; masters { bluedomIP6; bluedomIP4; }; file "/etc/bind/zones-inker/db.bluedomainZone"; };
 
 // vip
-zone "vipdomainZone" {
-type slave;
-masters { vipdomIP6; vipdomIP4; };
-file "/etc/bind/zones-inker/db.vipdomainZone";
-};
-zone "vipdomARPAIP4" {
-type slave;
-masters { vipdomIP4; };
-file "/etc/bind/zones-inker/nv.vipdomainZone";
-allow-query { any; };
-};
-zone "vipdomARPAIP6" {
-type slave;
-masters { vipdomIP6; };
-file "/etc/bind/zones-inker/nv.vipdomainZone";
-allow-query { any; };
-};
+zone "vipdomainZone" { type slave; masters { vipdomIP6; vipdomIP4; }; file "/etc/bind/zones-inker/db.vipdomainZone"; };
 
 // kiwi
-zone "kiwidomainZone" {
-type slave;
-masters { kiwidomIP6; kiwidomIP4; };
-file "/etc/bind/zones-inker/db.kiwidomainZone";
-};
-zone "kiwidomARPAIP4" {
-type slave;
-masters { kiwidomIP4; };
-file "/etc/bind/zones-inker/nv.kiwidomainZone";
-allow-query { any; };
-};
-zone "kiwidomARPAIP6" {
-type slave;
-masters { kiwidomIP6; };
-file "/etc/bind/zones-inker/nv.kiwidomainZone";
-allow-query { any; };
-};
+zone "kiwidomainZone" { type slave; masters { kiwidomIP6; kiwidomIP4; }; file "/etc/bind/zones-inker/db.kiwidomainZone"; };
 
 // cash
-zone "cashdomainZone" {
-type slave;
-masters { cashdomIP6; cashdomIP4; };
-file "/etc/bind/zones-inker/db.cashdomainZone";
-};
-zone "cashdomARPAIP4" {
-type slave;
-masters { cashdomIP4; };
-file "/etc/bind/zones-inker/nv.cashdomainZone";
-allow-query { any; };
-};
-zone "cashdomARPAIP6" {
-type slave;
-masters { cashdomIP6; };
-file "/etc/bind/zones-inker/nv.cashdomainZone";
-allow-query { any; };
-};
+zone "cashdomainZone" { type slave; masters { cashdomIP6; cashdomIP4; }; file "/etc/bind/zones-inker/db.cashdomainZone"; };
 
 // pink
-zone "pinkdomainZone" {
-type slave;
-masters { pinkdomIP6; pinkdomIP4; };
-file "/etc/bind/zones-inker/db.pinkdomainZone";
-};
-zone "pinkdomARPAIP4" {
-type slave;
-masters { pinkdomIP4; };
-file "/etc/bind/zones-inker/nv.pinkdomainZone";
-allow-query { any; };
-};
-zone "pinkdomARPAIP6" {
-type slave;
-masters { pinkdomIP6; };
-file "/etc/bind/zones-inker/nv.pinkdomainZone";
-allow-query { any; };
-};
+zone "pinkdomainZone" { type slave; masters { pinkdomIP6; pinkdomIP4; }; file "/etc/bind/zones-inker/db.pinkdomainZone"; };
 
 // red
-zone "reddomainZone" {
-type slave;
-masters { reddomIP6; reddomIP4; };
-file "/etc/bind/zones-inker/db.reddomainZone";
-};
-zone "reddomARPAIP4" {
-type slave;
-masters { reddomIP4; };
-file "/etc/bind/zones-inker/nv.reddomainZone";
-allow-query { any; };
-};
-zone "reddomARPAIP6" {
-type slave;
-masters { reddomIP6; };
-file "/etc/bind/zones-inker/nv.reddomainZone";
-allow-query { any; };
-};
+zone "reddomainZone" { type slave; masters { reddomIP6; reddomIP4; }; file "/etc/bind/zones-inker/db.reddomainZone"; };
 
 // rocks
-zone "rocksdomainZone" {
-type slave;
-masters { rocksdomIP6; rocksdomIP4; };
-file "/etc/bind/zones-inker/db.rocksdomainZone";
-};
-zone "rocksdomARPAIP4" {
-type slave;
-masters { rocksdomIP4; };
-file "/etc/bind/zones-inker/nv.rocksdomainZone";
-allow-query { any; };
-};
-zone "rocksdomARPAIP6" {
-type slave;
-masters { rocksdomIP6; };
-file "/etc/bind/zones-inker/nv.rocksdomainZone";
-allow-query { any; };
-};
+zone "rocksdomainZone" { type slave; masters { rocksdomIP6; rocksdomIP4; }; file "/etc/bind/zones-inker/db.rocksdomainZone"; };
 
 // Hosted domains
 

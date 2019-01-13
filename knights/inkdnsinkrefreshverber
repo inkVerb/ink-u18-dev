@@ -35,93 +35,78 @@ exit 0; fi
     ## Each verb tld
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/nfo.base
 
+    ### IP4 & IP6
+    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${emailVERBER}
+    sed -i "s/verberIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/verberIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/verberARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    sed -i "s/verberARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+
     ### email
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${emailVERBER}
     sed -i "s/emaildomainZone/${emailURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/emaildomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/emaildomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/emaildomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/emaildomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### city
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${cityVERBER}
     sed -i "s/citydomainZone/${cityURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/citydomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/citydomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/citydomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/citydomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### one
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${oneVERBER}
     sed -i "s/onedomainZone/${oneURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/onedomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/onedomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/onedomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/onedomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### ink
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${inkVERBER}
     sed -i "s/inkdomainZone/${inkURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/inkdomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/inkdomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/inkdomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/inkdomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### blue
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${blueVERBER}
     sed -i "s/bluedomainZone/${blueURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/bluedomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/bluedomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/bluedomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/bluedomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### vip
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${vipVERBER}
     sed -i "s/vipdomainZone/${vipURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/vipdomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/vipdomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/vipdomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/vipdomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### kiwi
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${kiwiVERBER}
     sed -i "s/kiwidomainZone/${kiwiURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/kiwidomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/kiwidomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/kiwidomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/kiwidomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### cash
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${cashVERBER}
     sed -i "s/cashdomainZone/${cashURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/cashdomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/cashdomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/cashdomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/cashdomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### pink
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${pinkVERBER}
     sed -i "s/pinkdomainZone/${pinkURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/pinkdomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/pinkdomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/pinkdomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/pinkdomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### red
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${redVERBER}
     sed -i "s/reddomainZone/${redURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/reddomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/reddomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/reddomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/reddomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### rocks
     . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${rocksVERBER}
     sed -i "s/rocksdomainZone/${rocksURI}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/rocksdomIP6/${VERBERIPV4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     sed -i "s/rocksdomIP4/${VERBERIPV6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/rocksdomARPAIP4/${VERBERARPAIP4}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    sed -i "s/rocksdomARPAIP6/${VERBERARPAIP6}/g" /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### Wrap-up
     echo "Base Verber records updated for ${VTYPE} ${VNAME}."
@@ -133,23 +118,7 @@ exit 0; fi
       . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/${domainNFO}
       . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${verberTLD}
       echo "// ${domainZone}
-zone \"${domainZone}\" {
-type slave;
-masters { $domIP6; $domIP4; };
-file \"/var/cache/bind/zones-inker/db.${domainZone}\";
-};
-zone \"${domARPAIP4}\" {
-type slave;
-masters { $domIP4; };
-file \"/var/cache/bind/zones-inker/nv.${domainZone}\";
-allow-query { any; };
-};
-zone \"${domARPAIP6}\" {
-type slave;
-masters { $domIP6; };
-file \"/var/cache/bind/zones-inker/nv.${domainZone}\";
-allow-query { any; };
-};
+zone \"${domainZone}\" { type slave; masters { $domIP6; $domIP4; }; file \"/var/cache/bind/zones-inker/db.${domainZone}\"; };
 " >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     echo "${domainZone} records updated for ${VTYPE} ${VNAME}."
     done
