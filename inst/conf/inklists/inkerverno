@@ -1,6 +1,6 @@
 #!/bin/sh
 # inkVerb Verber™ version information config, verb.ink
 
-IVERNO=0.206
+IVERNO=0.20.06
 IVTYPE=INK_INKER
 
