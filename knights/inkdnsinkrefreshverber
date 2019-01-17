@@ -43,66 +43,66 @@ exit 0; fi
     echo "// inkVerb-inkDNS ink domain list file, managed automatically, edits will likely be deleted
 " > /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
-    ### IP4 & IP6
-    echo "// IP4 & IP6
-zone \"${VERBERARPAIP4}\" { type slave; masters { verberIP4; }; file \"/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${onlyTLD}\";allow-query { any; }; };
-zone \"${VERBERARPAIP6}\" { type slave; masters { verberIP6; }; file \"/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${onlyTLD}\";allow-query { any; }; };
+    ### IP6 & IP4
+    echo "// IP6 & IP4
+zone \"${VERBERARPAIP6}\" { type slave; masters { "${VERBERIPV6}"; }; file \"/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${onlyTLD}\"; allow-query { any; }; };
+zone \"${VERBERARPAIP4}\" { type slave; masters { "${VERBERIPV4}"; }; file \"/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${onlyTLD}\"; allow-query { any; }; };
 
 // Hosted Verb TLDs" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### email
     if [ -n "${emailURI}" ]; then
-      echo "zone \"${emailURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${emailURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${emailURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${emailURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### city
     if [ -n "${cityURI}" ]; then
-      echo "zone \"${cityURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${cityURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${cityURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${cityURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### one
     if [ -n "${oneURI}" ]; then
-      echo "zone \"${oneURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${oneURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${oneURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${oneURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### ink
     if [ -n "${inkURI}" ]; then
-      echo "zone \"${inkURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${inkURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${inkURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${inkURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### blue
     if [ -n "${blueURI}" ]; then
-      echo "zone \"${blueURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${blueURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${blueURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${blueURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### vip
     if [ -n "${vipURI}" ]; then
-      echo "zone \"${vipURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${vipURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${vipURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${vipURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### kiwi
     if [ -n "${kiwiURI}" ]; then
-      echo "zone \"${kiwiURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${kiwiURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${kiwiURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${kiwiURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### cash
     if [ -n "${cashURI}" ]; then
-      echo "zone \"${cashURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${cashURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${cashURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${cashURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### pink
     if [ -n "${pinkURI}" ]; then
-      echo "zone \"${pinkURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${pinkURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${pinkURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${pinkURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### red
     if [ -n "${redURI}" ]; then
-      echo "zone \"${redURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${redURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${redURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${redURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### rocks
     if [ -n "${rocksURI}" ]; then
-      echo "zone \"${rocksURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${rocksURI}\"; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${rocksURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${rocksURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### Wrap-up
@@ -116,9 +116,7 @@ zone \"${VERBERARPAIP6}\" { type slave; masters { verberIP6; }; file \"/var/cach
       domainZone="$(echo ${domainNFO} | sed 's/domain\.//' )"
       . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/${domainNFO}
       . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${verberTLD}
-      echo "// ${domainZone}
-zone \"${domainZone}\" { type slave; masters { $domIP6; $domIP4; }; file \"/var/cache/bind/zones-inker/db.${domainZone}\"; };
-" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${domainZone}\" { type slave; masters { $domIP6; $domIP4; }; file \"/var/cache/bind/zones-inker/db.${domainZone}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
     echo "${domainZone} records updated for ${VTYPE} ${VNAME}."
     done
 
