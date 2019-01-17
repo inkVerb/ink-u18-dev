@@ -10,7 +10,7 @@
 # Eg:
 ## ./verberdomain verb name poetryiscode.com
 ## ./verberdomain verb name poetryiscode.com kiwi
-## ./verberdomain dmod poetryiscode.com inkisaverb. blue
+## ./verberdomain dmod poetryiscode.com inkisaverb.com blue
 
 
 VTYPE="$1"

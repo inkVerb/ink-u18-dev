@@ -1,0 +1,66 @@
+#!/bin/bash
+#inkVerbKnight! verb.ink
+#set -e
+
+# This moves a hosted TLD to a secondary-multi Verber on this Inker
+
+# How to use:
+## ./verbermovetld [ vspace name / MOD ] [ hosting tld ] [ moving tld ]
+
+# Eg:
+## ./verbermovetld name blue kiwi
+## ./verbermovetld MOD red rocks poetryiscode.com
+
+
+VNAME="$1"
+HOSTTLD="$2"
+MOVETLD="$3"
+DMODBASE="$4"
+
+# "Stupid" check
+if [ "${HOSTTLD}" = "${MOVETLD}" ]; then
+echo "Um... A hosted TLD is already set to host itself. Nice try, tho."; exit 0
+fi
+
+# For domain mod Verber
+if [ -n "${DMODBASE}" ] && [ "${VNAME}" = "MOD" ]; then
+## Check if installed
+if [ ! -f "/var/local/ink/verbers/v.dmod.${DMODBASE}/nfo.base" ]; then
+echo "No such Verber installed. That comes first."
+fi
+## Check if multi-hosting is allowed
+. /var/local/ink/verbers/v.dmod.${VNAME}/nfo.status
+if [ "${VSTATUS}" != "multi" ]; then
+echo "This Verber is not yet allowed multiple hosts. That comes first. Use: verberstatus verb ${DMODBASE} multi"; exit 0
+fi
+## Check if the hosting tld exists
+if [ ! -f "/var/local/ink/verbers/v.dmod.${VNAME}/tld.${HOSTTLD}"]; then
+echo "The TLD ${HOSTTLD} is not setup. Do that first. Use: verbermulti ${VNAME} ${HOSTTLD} ...with IP information and domain base"
+fi
+## Set the configs
+hostedURI="${MOVETLD}.${DMODBASE}"
+sed -i "/${hostedURI}/d" /var/local/ink/verbers/v.dmod.${VNAME}/*
+sed -i "s/${MOVETLD}VERBER=.*/${MOVETLD}VERBER=\"${HOSTTLD}\"" /var/local/ink/verbers/v.dmod.${DMODBASE}/nfo.base
+echo "${MOVETLD}URI=\"${hostedURI}\"" >> /var/local/ink/verbers/v.dmod.${VNAME}/tld.${HOSTTLD}
+
+# Verb domain Verber
+else
+## Check if installed
+if [ ! -f "/var/local/ink/verbers/v.verb.${VNAME}/nfo.base" ]; then
+echo "No such Verber installed. That comes first."
+fi
+## Check if multi-hosting is allowed
+. /var/local/ink/verbers/v.verb.${VNAME}/nfo.status
+if [ "${VSTATUS}" != "multi" ]; then
+echo "This Verber is not yet allowed multiple hosts. That comes first. Use: verberstatus verb ${DMODBASE} multi"; exit 0
+fi
+## Check if the hosting tld exists
+if [ ! -f "/var/local/ink/verbers/v.verb.${VNAME}/tld.${HOSTTLD}"]; then
+echo "The TLD ${HOSTTLD} is not setup. Do that first. Use: verbermulti ${VNAME} ${HOSTTLD} ...with IP information and domain base"
+fi
+## Set the configs
+hostedURI="${VNAME}.verb.${MOVETLD}"
+sed -i "/${hostedURI}/d" /var/local/ink/verbers/v.verb.${VNAME}/*
+sed -i "s/${MOVETLD}VERBER=.*/${MOVETLD}VERBER=\"${HOSTTLD}\"" /var/local/ink/verbers/v.verb.${VNAME}/nfo.base
+echo "${MOVETLD}URI=\"${hostedURI}\"" >> /var/local/ink/verbers/v.verb.${VNAME}/tld.${HOSTTLD}
+fi

@@ -32,8 +32,8 @@ chmod -R 644 /var/cache/bind/zones-inker
 ## DEV: FYI apparmor permissions are here: /etc/apparmor.d/usr.sbin.named
 
 # include the Inker file
-echo '// Below added by #inkVerbInker-inkDNS' >> /var/cache/bind/named.conf.local
-echo 'include "/var/cache/bind/named.conf.inker";' >> /var/cache/bind/named.conf.local
+echo '// Below added by #inkVerbInker-inkDNS' >> /etc/bind/named.conf.local
+echo 'include "/var/cache/bind/named.conf.inker";' >> /etc/bind/named.conf.local
 
 # Config
 echo "#!/bin/sh

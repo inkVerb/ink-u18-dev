@@ -1,0 +1,238 @@
+#!/bin/bash
+#inkVerbKnight! verb.ink
+#set -e
+
+# This adds a to-be-hosted TLD Verber to an existing Verber on this Inker
+
+# How to use:
+## ./verbermulti [ vspace name / MOD ] [ main tld ] [ IPv4 ] [ IPv6 ] [ domain.tld mod base - OPTIONAL, only if a domain mod ]
+
+# Eg:
+## ./verbermulti name ink 555.555.555.555 2008::abcd
+## ./verbermulti MOD ink 555.555.555.555.2008::abcd poetryiscode.com
+
+
+VNAME="$1"
+SERVERTLD="$2"
+SERVERIPV4="$3"
+SERVERIPV6="$4"
+DMODBASE="$5"
+
+# Set the IPv4 for ARPA
+SERVERARPAIP4=$(echo ${SERVERIPV4} | sed -r 's/^([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3})$/\4.\3.\2.\1.in-addr.arpa/')
+
+# Set the IPv6 for ARPA
+## Expand/Compress
+## THANKS https://stackoverflow.com/a/50208987/10343144
+
+### helper to convert hex to dec (portable version)
+hex2dec(){
+    [ "$1" != "" ] && printf "%d" "$(( 0x$1 ))"
+}
+
+### expand an IPv6 address
+expand_ipv6() {
+    ip=$1
+
+    # prepend 0 if we start with :
+    echo $ip | grep -qs "^:" && ip="0${ip}"
+
+    # expand ::
+    if echo $ip | grep -qs "::"; then
+        colons=$(echo $ip | sed 's/[^:]//g')
+        missing=$(echo ":::::::::" | sed "s/$colons//")
+        expanded=$(echo $missing | sed 's/:/:0/g')
+        ip=$(echo $ip | sed "s/::/$expanded/")
+    fi
+
+    blocks=$(echo $ip | grep -o "[0-9a-f]\+")
+    set $blocks
+
+    printf "%04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x\n" \
+        $(hex2dec $1) \
+        $(hex2dec $2) \
+        $(hex2dec $3) \
+        $(hex2dec $4) \
+        $(hex2dec $5) \
+        $(hex2dec $6) \
+        $(hex2dec $7) \
+        $(hex2dec $8)
+}
+
+### returns a compressed IPv6 address under the form recommended by RFC5952
+compress_ipv6() {
+    ip=$1
+
+    blocks=$(echo $ip | grep -o "[0-9a-f]\+")
+    set $blocks
+
+    # compress leading zeros
+    ip=$(printf "%x:%x:%x:%x:%x:%x:%x:%x\n" \
+        $(hex2dec $1) \
+        $(hex2dec $2) \
+        $(hex2dec $3) \
+        $(hex2dec $4) \
+        $(hex2dec $5) \
+        $(hex2dec $6) \
+        $(hex2dec $7) \
+        $(hex2dec $8)
+    )
+
+    # prepend : for easier matching
+    ip=:$ip
+
+    # :: must compress the longest chain
+    for pattern in :0:0:0:0:0:0:0:0 \
+            :0:0:0:0:0:0:0 \
+            :0:0:0:0:0:0 \
+            :0:0:0:0:0 \
+            :0:0:0:0 \
+            :0:0; do
+        if echo $ip | grep -qs $pattern; then
+            ip=$(echo $ip | sed "s/$pattern/::/")
+            # if the substitution occured before the end, we have :::
+            ip=$(echo $ip | sed 's/:::/::/')
+            break # only one substitution
+        fi
+    done
+
+    # remove prepending : if necessary
+    echo $ip | grep -qs "^:[^:]" && ip=$(echo $ip | sed 's/://')
+
+    echo $ip
+}
+
+### reverse expanded IPv6 for ARPA
+### THANKS https://stackoverflow.com/a/53674816/10343144
+rarpa_ipv6() {
+  local idx s=${1//:}
+  for (( idx=${#s} - 1; idx>=0; idx-- )); do
+    printf '%s.' "${s:$idx:1}"
+  done
+  printf 'ip6.arpa\n'
+}
+
+## Our new variables for the rest
+SERVEREXPIP6=$(expand_ipv6 ${SERVERIPV6})
+SERVERCMPIP6=$(compress_ipv6 ${SERVERIPV6})
+SERVERRARPA6=$(rarpa_ipv6 ${SERVEREXPIP6})
+
+
+# For domain mod Verber
+if [ -n "${DMODBASE}" ] && [ "${VNAME}" = "MOD" ]; then
+## Check if installed
+if [ ! -f "/var/local/ink/verbers/v.dmod.${DMODBASE}/nfo.base" ]; then
+echo "No such Verber installed. That comes first."; exit 0
+fi
+## Check if multi-hosting is allowed
+. /var/local/ink/verbers/v.dmod.${VNAME}/nfo.status
+if [ "${VSTATUS}" != "multi" ]; then
+echo "This Verber is not yet allowed multiple hosts. That comes first. Use: verberstatus verb ${DMODBASE} multi"; exit 0
+fi
+## Basic values
+newnameURI="${SERVERTLD}.${DMODBASE}"
+newemailTLDURI="${SERVERTLD}.${DMODBASE}"
+## Check for duplicare IP address entries
+cd /var/local/ink/verbers/v.dmod.${VNAME}/
+for vTLDnfo in tld.*; do
+onlyTLD="$(echo ${vTLDnfo} | sed 's/tld\.//' )"
+. /var/local/ink/verbers/v.dmod.${VNAME}/${vTLDnfo}
+  if [ "${nameURI}" = "${newnameURI}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${emailTLDURI}" = "${newemailTLDURI}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBERIPV4}" = "${SERVERIPV4}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBERIPV6}" = "${SERVERCMPIP6}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBEREXPIPV6}" = "${SERVEREXPIP6}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBERARPAIP4}" = "${SERVERARPAIP4}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBERARPAIP6}" = "${SERVERRARPA6}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+done
+## Set the tld config
+echo "#!/bin/sh
+## This is a config file for other verb scripts
+
+# Name-IP info
+nameURI=\"${newnameURI}\"
+emailTLDURI=\"${newemailTLDURI}\"
+VERBERIPV4=\"${SERVERIPV4}\"
+VERBERIPV6=\"${SERVERCMPIP6}\"
+VERBEREXPIPV6=\"${SERVEREXPIP6}\"
+VERBERARPAIP4=\"${SERVERARPAIP4}\"
+VERBERARPAIP6=\"${SERVERRARPA6}\"
+
+# Hosted URI list
+vNAME=\"${DMODBASE}\"
+${SERVERTLD}URI=\"${SERVERTLD}.${DMODBASE}\"
+" > /var/local/ink/verbers/v.dmod.${DMODBASE}/tld.${SERVERTLD}
+
+# Verb domain Verber
+else
+## Check if installed
+if [ ! -f "/var/local/ink/verbers/v.verb.${VNAME}/nfo.base" ]; then
+echo "No such Verber installed. That comes first."; exit 0
+fi
+## Check if multi-hosting is allowed
+. /var/local/ink/verbers/v.verb.${VNAME}/nfo.status
+if [ "${VSTATUS}" != "multi" ]; then
+echo "This Verber is not yet allowed multiple hosts. That comes first. Use: verberstatus verb ${DMODBASE} multi"; exit 0
+fi
+## Basic values
+newnameURI="${VNAME}.verb.${SERVERTLD}"
+newemailTLDURI="${VNAME}.verb.${SERVERTLD}"
+## Check for duplicare IP address entries
+cd /var/local/ink/verbers/v.verb.${VNAME}/
+for vTLDnfo in tld.*; do
+onlyTLD="$(echo ${vTLDnfo} | sed 's/tld\.//' )"
+. /var/local/ink/verbers/v.verb.${VNAME}/${vTLDnfo}
+  if [ "${nameURI}" = "${newnameURI}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${emailTLDURI}" = "${newemailTLDURI}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBERIPV4}" = "${SERVERIPV4}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBERIPV6}" = "${SERVERCMPIP6}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBEREXPIPV6}" = "${SERVEREXPIP6}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBERARPAIP4}" = "${SERVERARPAIP4}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+  if [ "${VERBERARPAIP6}" = "${SERVERRARPA6}" ]; then
+    echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
+  fi
+done
+## Set the tld config
+echo "#!/bin/sh
+## This is a config file for other verb scripts
+
+# Name-IP info
+nameURI=\"${newnameURI}\"
+emailTLDURI=\"${newemailTLDURI}\"
+VERBERIPV4=\"${SERVERIPV4}\"
+VERBERIPV6=\"${SERVERCMPIP6}\"
+VERBEREXPIPV6=\"${SERVEREXPIP6}\"
+VERBERARPAIP4=\"${SERVERARPAIP4}\"
+VERBERARPAIP6=\"${SERVERRARPA6}\"
+
+# Hosted URI list
+vNAME=\"${VNAME}\"
+${SERVERTLD}URI=\"${VNAME}.verb.${SERVERTLD}\"
+" > /var/local/ink/verbers/v.verb.${VNAME}/tld.${SERVERTLD}
+fi

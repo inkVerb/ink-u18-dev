@@ -119,25 +119,11 @@ SERVERCMPIP6=$(compress_ipv6 ${SERVERIPV6})
 SERVERRARPA6=$(rarpa_ipv6 ${SERVEREXPIP6})
 
 
-# For domain mod or verb Verber
-if [ -n "$6" ] && [ "$1" = "MOD" ]; then
+# For domain mod Verber
+if [ -n "${DMODBASE}" ] && [ "${VNAME}" = "MOD" ]; then
 mkdir -p /var/local/ink/verbers/v.dmod.${DMODBASE}
 echo "#!/bin/sh
 ## This is a config file for other verb scripts
-
-# URI list
-vNAME=\"${DMODBASE}\"
-emailURI=\"email.${DMODBASE}\"
-cityURI=\"city.${DMODBASE}\"
-oneURI=\"one.${DMODBASE}\"
-inkURI=\"ink.${DMODBASE}\"
-blueURI=\"blue.${DMODBASE}\"
-vipURI=\"vip.${DMODBASE}\"
-kiwiURI=\"kiwi.${DMODBASE}\"
-cashURI=\"cash.${DMODBASE}\"
-pinkURI=\"pink.${DMODBASE}\"
-redURI=\"red.${DMODBASE}\"
-rocksURI=\"rocks.${DMODBASE}\"
 
 # Hosting Verbers
 emailVERBER=\"${SERVERTLD}\"
@@ -151,12 +137,12 @@ cashVERBER=\"${SERVERTLD}\"
 pinkVERBER=\"${SERVERTLD}\"
 redVERBER=\"${SERVERTLD}\"
 rocksVERBER=\"${SERVERTLD}\"
-
 " > /var/local/ink/verbers/v.dmod.${DMODBASE}/nfo.base
 
 echo "#!/bin/sh
 ## This is a config file for other verb scripts
 
+# Name-IP info
 nameURI=\"${SERVERTLD}.${DMODBASE}\"
 emailTLDURI=\"${SVMAILTLD}.${DMODBASE}\"
 VERBERIPV4=\"${SERVERIPV4}\"
@@ -164,28 +150,28 @@ VERBERIPV6=\"${SERVERCMPIP6}\"
 VERBEREXPIPV6=\"${SERVEREXPIP6}\"
 VERBERARPAIP4=\"${SERVERARPAIP4}\"
 VERBERARPAIP6=\"${SERVERRARPA6}\"
+
+# Hosted URI list
+vNAME=\"${DMODBASE}\"
+emailURI=\"email.${DMODBASE}\"
+cityURI=\"city.${DMODBASE}\"
+oneURI=\"one.${DMODBASE}\"
+inkURI=\"ink.${DMODBASE}\"
+blueURI=\"blue.${DMODBASE}\"
+vipURI=\"vip.${DMODBASE}\"
+kiwiURI=\"kiwi.${DMODBASE}\"
+cashURI=\"cash.${DMODBASE}\"
+pinkURI=\"pink.${DMODBASE}\"
+redURI=\"red.${DMODBASE}\"
+rocksURI=\"rocks.${DMODBASE}\"
 " > /var/local/ink/verbers/v.dmod.${DMODBASE}/tld.${SERVERTLD}
 /var/local/ink/knights/verberstatus verb ${DMODBASE} solo
 
+# Verb domain Verber
 else
-
 mkdir -p /var/local/ink/verbers/v.verb.${VNAME}
 echo "#!/bin/sh
 ## This is a config file for other verb scripts
-
-# URI list
-vNAME=\"${VNAME}\"
-emailURI=\"${VNAME}.verb.email\"
-cityURI=\"${VNAME}.verb.city\"
-oneURI=\"${VNAME}.verb.one\"
-inkURI=\"${VNAME}.verb.ink\"
-blueURI=\"${VNAME}.verb.blue\"
-vipURI=\"${VNAME}.verb.vip\"
-kiwiURI=\"${VNAME}.verb.kiwi\"
-cashURI=\"${VNAME}.verb.cash\"
-pinkURI=\"${VNAME}.verb.pink\"
-redURI=\"${VNAME}.verb.red\"
-rocksURI=\"${VNAME}.verb.rocks\"
 
 # Hosting Verbers
 emailVERBER=\"${SERVERTLD}\"
@@ -204,6 +190,7 @@ rocksVERBER=\"${SERVERTLD}\"
 echo "#!/bin/sh
 ## This is a config file for other verb scripts
 
+# Name-IP info
 nameURI=\"${VNAME}.verb.${SERVERTLD}\"
 emailTLDURI=\"${VNAME}.verb.${SVMAILTLD}\"
 VERBERIPV4=\"${SERVERIPV4}\"
@@ -211,6 +198,20 @@ VERBERIPV6=\"${SERVERCMPIP6}\"
 VERBEREXPIPV6=\"${SERVEREXPIP6}\"
 VERBERARPAIP4=\"${SERVERARPAIP4}\"
 VERBERARPAIP6=\"${SERVERRARPA6}\"
+
+# Hosted URI list
+vNAME=\"${VNAME}\"
+emailURI=\"${VNAME}.verb.email\"
+cityURI=\"${VNAME}.verb.city\"
+oneURI=\"${VNAME}.verb.one\"
+inkURI=\"${VNAME}.verb.ink\"
+blueURI=\"${VNAME}.verb.blue\"
+vipURI=\"${VNAME}.verb.vip\"
+kiwiURI=\"${VNAME}.verb.kiwi\"
+cashURI=\"${VNAME}.verb.cash\"
+pinkURI=\"${VNAME}.verb.pink\"
+redURI=\"${VNAME}.verb.red\"
+rocksURI=\"${VNAME}.verb.rocks\"
 " > /var/local/ink/verbers/v.verb.${VNAME}/tld.${SERVERTLD}
 /var/local/ink/knights/verberstatus verb ${VNAME} solo
 fi
