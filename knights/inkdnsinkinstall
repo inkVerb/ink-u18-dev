@@ -33,7 +33,7 @@ chmod -R 644 /var/cache/bind/zones-inker
 
 # include the Inker file
 echo '// Below added by #inkVerbInker-inkDNS' >> /etc/bind/named.conf.local
-echo 'include "/var/cache/bind/named.conf.inker";' >> /etc/bind/named.conf.local
+echo 'include "/etc/bind/named.conf.inker";' >> /etc/bind/named.conf.local
 
 # Config
 echo "#!/bin/sh
