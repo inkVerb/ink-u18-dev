@@ -13,9 +13,13 @@
 ## ./verberverbdomain verb name kiwi
 ## ./verberverbdomain dmod poetryiscode.com
 
+
 VTYPE="$1"
 VNAME="$2"
 VADDTLD="$3"
+# Inker nsURI
+. /var/local/verb/conf/siteurilist
+nsURI="${hostURI}"
 
 # Check if Verber account exists
 if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
@@ -42,7 +46,7 @@ if [ -z "${!addverbURI}" ]; then
 
 # Check if the necessary Bind rDNS file exists
 if [ ! -f "/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${!hostingTLD}" ]; then
-  echo "Something's wrong. The Bind rDNS file for this Verber should exist, but it does not. Doing nothing."
+  echo "Something's wrong. The Bind rDNS file for the \"${VTYPE}.${VNAME}.${!hostingTLD}\" Verber should exist, but it does not. Doing nothing."
   exit 6; fi
 
 # Check whether the multiple hosting option is allowed, abort if not
@@ -51,6 +55,9 @@ if [ "${!hostingTLD}" != "ink" ]; then
   if [ "${VSTATUS}" = "solo" ]; then
   echo "Something is very wrong. The hosting Verber TLD is not set to \"ink\", but multi-hosting is not allowed. Aborting."
   exit 6; fi; fi
+
+# Inker's Verber config
+. /var/local/verb/conf/sitenameip
 
 # DNS zone file
 ## Hosting Verber's config
@@ -65,10 +72,8 @@ ${!addverbURI}.		IN  SOA		${hostURI}. root.${nameURI}. (
 
 \$ORIGIN ${!addverbURI}.
 ; Nameserver Defaults
-@		IN  NS		${hostURI}." > /var/cache/bind/zones-inker/db.${!addverbURI}
-## Inker's Verber config
-. /var/local/verb/conf/sitenameip
-echo "@		IN  NS		${hostURI}.
+@		IN  NS		${hostURI}.
+@		IN  NS		${nsURI}.
 @		IN  NS		${SITEINKERDNS}.
 
 ; Original Defaults

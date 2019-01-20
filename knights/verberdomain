@@ -18,6 +18,9 @@ VTYPE="$1"
 VNAME="$2"
 VDOMAIN="$3"
 VTLD="$4"
+# Inker nsURI
+. /var/local/verb/conf/siteurilist
+nsURI="${hostURI}"
 
 # Check if Verber account exists
 if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
@@ -57,6 +60,9 @@ domARPAIP4=\"${VERBERARPAIP4}\"
 domARPAIP6=\"${VERBERARPAIP6}\"
 " > /var/local/ink/verbers/v.${VTYPE}.${VNAME}/domain.${VDOMAIN}
 
+# Inker's Verber config
+. /var/local/verb/conf/sitenameip
+
 # DNS zone file
 ## Hosting Verber's config
 echo "\$TTL    86400
@@ -69,10 +75,7 @@ ${VDOMAIN}.		IN  SOA		${hostURI}. root.${nameURI}. (
 
 \$ORIGIN ${VDOMAIN}.
 ; Nameserver Defaults
-@		IN  NS		${hostURI}." > /var/cache/bind/zones-inker/db.${VDOMAIN}
-## Inker's Verber config
-. /var/local/verb/conf/sitenameip
-echo "@		IN  NS		${hostURI}.
+@		IN  NS		${hostURI}.@		IN  NS		${nsURI}.
 @		IN  NS		${SITEINKERDNS}.
 
 ; Original Defaults
