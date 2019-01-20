@@ -1,0 +1,89 @@
+#!/bin/bash
+#inkVerbKnight! verb.ink
+#set -e
+
+# This creates a Verb domain's Bind DNS & rDNS zone files to an existing Verber's account on this Inker, using the hosting tld for this to-add tld as already set in nfo.base
+## This is not meant to be used by itself, but either by verberadd or verbermovetld
+
+# How to use:
+## ./verberverbdomain [ Verber type - "verb" or "dmod" ] [ vname OR mod-domain.tld ] [ to-add tld ]
+
+# Eg:
+## ./verberverbdomain verb name ink
+## ./verberverbdomain verb name kiwi
+## ./verberverbdomain dmod poetryiscode.com
+
+VTYPE="$1"
+VNAME="$2"
+VADDTLD="$3"
+
+# Check if Verber account exists
+if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
+  echo "That Verber is not setup. Doing nothing."
+  exit 0; fi
+
+# Include the config
+. /var/local/ink/verbers/v.${VTYPE}.${VNAME}/nfo.base
+
+# Default tld value
+addverbURI="${VADDTLD}URI"
+## Now, `${!addverbURI}` will function the same as `$kiwiURI`, if "kiwi" is the designated tld; this requires BASH on line 1
+hostingTLD="${VADDTLD}VERBER"
+## Now, `${!hostingTLD}` will function the same as `$kiwiVERBER`, if "kiwi" is the designated tld; this requires BASH on line 1
+## Check if the tld is real and exists
+if [ -z "${!hostingTLD}" ]; then
+  echo "The TLD ${VADDTLD} does not exist on this Verber, choose a TLD that exists."; fi
+## Include the configs
+. /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${!hostingTLD}
+## Check if the tld is real and has a URI
+if [ -z "${!addverbURI}" ]; then
+  echo "The TLD ${VADDTLD} does not have a URI set on this Verber, this is a catostrophic error. Aborting."
+  exit 6; fi
+
+# Check if the necessary Bind rDNS file exists
+if [ ! -f "/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${!hostingTLD}" ]; then
+  echo "Something's wrong. The Bind rDNS file for this Verber should exist, but it does not. Doing nothing."
+  exit 6; fi
+
+# Check whether the multiple hosting option is allowed, abort if not
+if [ "${!hostingTLD}" != "ink" ]; then
+  . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/nfo.status
+  if [ "${VSTATUS}" = "solo" ]; then
+  echo "Something is very wrong. The hosting Verber TLD is not set to \"ink\", but multi-hosting is not allowed. Aborting."
+  exit 6; fi; fi
+
+# DNS zone file
+## Hosting Verber's config
+rm -f /var/cache/bind/zones-inker/db.${!addverbURI}
+echo "\$TTL    86400
+${!addverbURI}.		IN  SOA		${hostURI}. root.${nameURI}. (
+0000000001		; Serial No
+10800			; Refresh
+3600			; Retry
+604800			; Expire
+1800 )			; Minimum TTL
+
+\$ORIGIN ${!addverbURI}.
+; Nameserver Defaults
+@		IN  NS		${hostURI}." > /var/cache/bind/zones-inker/db.${!addverbURI}
+## Inker's Verber config
+. /var/local/verb/conf/sitenameip
+echo "@		IN  NS		${hostURI}.
+@		IN  NS		${SITEINKERDNS}.
+
+; Original Defaults
+@		IN  A		${VERBERIPV4}
+@		IN  AAAA	${VERBERIPV6}
+*.${!addverbURI}.		IN  A		${VERBERIPV4}
+*.${!addverbURI}.		IN  AAAA	${VERBERIPV6}" >> /var/cache/bind/zones-inker/db.${!addverbURI}
+chown bind:bind /var/cache/bind/zones-inker/db.${!addverbURI}
+chmod 644 /var/cache/bind/zones-inker/db.${!addverbURI}
+
+# rDNS zone file
+## DEV: In theory, this should not be necessary since the rDNS should be updadating automatically from the master Bind Verber
+## DEV: Delete this entire rDNS zone file addition if the Bind slave file on this Inker is updating properly
+#echo "${VERBERARPAIP4}		IN  PTR  ${!addverbURI}.
+#${VERBERARPAIP6}		IN  PTR  ${!addverbURI}." >> /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${!hostingTLD}
+
+# Finish
+echo "The Verb domain \"${!addverbURI}\" has been added to the Verber host with TLD \"${!hostingTLD}\"."

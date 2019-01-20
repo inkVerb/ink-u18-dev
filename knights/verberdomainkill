@@ -1,0 +1,29 @@
+#!/bin/sh
+#inkVerbKnight! verb.ink
+#set -e
+
+# This removes a hosted domain from an existing Verber's account on this Inker
+## The proper way to move a domain from one Verber host to another is to remove it with this, then add it again with the correct Verber TLD
+
+# How to use:
+## ./verberdomainkill [ Verber type - "verb" or "dmod" ] [ vname OR mod-domain.tld ] [ domain.tld ]
+
+# Eg:
+## ./verberdomainkill verb name poetryiscode.com
+## ./verberdomainkill dmod poetryiscode.com inkisaverb.com
+
+
+VTYPE="$1"
+VNAME="$2"
+VDOMAIN="$3"
+
+# Check if Verber account exists
+if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
+  echo "That Verber is not setup. Doing nothing."
+  exit 0; fi
+
+# Domain config
+rm -f /var/local/ink/verbers/v.${VTYPE}.${VNAME}/domain.${VDOMAIN}
+
+# rDNS zone file
+sed -i "s/${VDOMAIN}/d" /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${VTLD}

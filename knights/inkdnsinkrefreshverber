@@ -3,7 +3,8 @@
 #set -e
 
 # This resets a complete list of a single remote inkDNS verm/domain-mod Verber account's base domain and all it's hosted domain slave records in the Bind9 config file: /var/cache/bind/verbers/named.conf.VERBERACCOUNT.verbacct
-## This only processes one, single Verber "name" account, but all domains for its DNS
+## This only processes one, single Verber "name" account, but incldues all domains for its DNS
+## This only resets the entries in Bind, not the actual zone file contents themselves.
 ## Eg, this will set all name.verb.ink, name.verb.emial, name.verb.blue, etc, and other domains (added to this Inker) records, but only for the "name" Verb namespace, also with a domain-mod
 
 # How to use:

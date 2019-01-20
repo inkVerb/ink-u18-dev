@@ -64,3 +64,6 @@ sed -i "/${hostedURI}/d" /var/local/ink/verbers/v.verb.${VNAME}/*
 sed -i "s/${MOVETLD}VERBER=.*/${MOVETLD}VERBER=\"${HOSTTLD}\"" /var/local/ink/verbers/v.verb.${VNAME}/nfo.base
 echo "${MOVETLD}URI=\"${hostedURI}\"" >> /var/local/ink/verbers/v.verb.${VNAME}/tld.${HOSTTLD}
 fi
+
+# Bind DNS zone file
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} ${MOVETLD}

@@ -2,22 +2,23 @@
 #inkVerbKnight! verb.ink
 #set -e
 
-# This adds a supported Verber to this Inker
+# This adds a new supported Verber to this Inker
 
 # How to use:
-## ./verberadd [ vspace name / MOD ] [ main tld ] [ mail tld ] [ IPv4 ] [ IPv6 ] [ domain.tld mod base - OPTIONAL, only if a domain mod ]
+## ./verberadd [ vspace name / MOD ] [ host ] [ main tld ] [ mail tld ] [ IPv4 ] [ IPv6 ] [ domain.tld mod base - OPTIONAL, only if a domain mod ]
 
 # Eg:
-## ./verbadd name ink email 555.555.555.555 2008::abcd
-## ./verbadd MOD ink email 555.555.555.555.2008::abcd poetryiscode.com
+## ./verbadd name name1 ink email 555.555.555.555 2008::abcd
+## ./verbadd MOD mody1 ink email 555.555.555.555.2008::abcd poetryiscode.com
 
 
 VNAME="$1"
-SERVERTLD="$2"
-SVMAILTLD="$3"
-SERVERIPV4="$4"
-SERVERIPV6="$5"
-DMODBASE="$6"
+VHOST="$2"
+SERVERTLD="$3"
+SVMAILTLD="$4"
+SERVERIPV4="$5"
+SERVERIPV6="$6"
+DMODBASE="$7"
 
 # Set the IPv4 for ARPA
 SERVERARPAIP4=$(echo ${SERVERIPV4} | sed -r 's/^([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3})$/\4.\3.\2.\1.in-addr.arpa/')
@@ -143,8 +144,6 @@ echo "#!/bin/sh
 ## This is a config file for other verb scripts
 
 # Name-IP info
-nameURI=\"${SERVERTLD}.${DMODBASE}\"
-emailTLDURI=\"${SVMAILTLD}.${DMODBASE}\"
 VERBERIPV4=\"${SERVERIPV4}\"
 VERBERIPV6=\"${SERVERCMPIP6}\"
 VERBEREXPIPV6=\"${SERVEREXPIP6}\"
@@ -153,6 +152,10 @@ VERBERARPAIP6=\"${SERVERRARPA6}\"
 
 # Hosted URI list
 vNAME=\"${DMODBASE}\"
+vHOST=\"${VHOST}\"
+hostURI=\"${VHOST}.${SERVERTLD}.${DMODBASE}\"
+nameURI=\"${SERVERTLD}.${DMODBASE}\"
+emailTLDURI=\"${SVMAILTLD}.${DMODBASE}\"
 emailURI=\"email.${DMODBASE}\"
 cityURI=\"city.${DMODBASE}\"
 oneURI=\"one.${DMODBASE}\"
@@ -166,6 +169,7 @@ redURI=\"red.${DMODBASE}\"
 rocksURI=\"rocks.${DMODBASE}\"
 " > /var/local/ink/verbers/v.dmod.${DMODBASE}/tld.${SERVERTLD}
 /var/local/ink/knights/verberstatus verb ${DMODBASE} solo
+. /var/local/ink/verbers/v.dmod.${DMODBASE}/tld.${SERVERTLD}
 
 # Verb domain Verber
 else
@@ -191,8 +195,6 @@ echo "#!/bin/sh
 ## This is a config file for other verb scripts
 
 # Name-IP info
-nameURI=\"${VNAME}.verb.${SERVERTLD}\"
-emailTLDURI=\"${VNAME}.verb.${SVMAILTLD}\"
 VERBERIPV4=\"${SERVERIPV4}\"
 VERBERIPV6=\"${SERVERCMPIP6}\"
 VERBEREXPIPV6=\"${SERVEREXPIP6}\"
@@ -201,6 +203,10 @@ VERBERARPAIP6=\"${SERVERRARPA6}\"
 
 # Hosted URI list
 vNAME=\"${VNAME}\"
+vHOST=\"${VHOST}\"
+hostURI=\"${VHOST}.${VNAME}.verb.email\"
+nameURI=\"${VNAME}.verb.${SERVERTLD}\"
+emailTLDURI=\"${VNAME}.verb.${SVMAILTLD}\"
 emailURI=\"${VNAME}.verb.email\"
 cityURI=\"${VNAME}.verb.city\"
 oneURI=\"${VNAME}.verb.one\"
@@ -214,4 +220,40 @@ redURI=\"${VNAME}.verb.red\"
 rocksURI=\"${VNAME}.verb.rocks\"
 " > /var/local/ink/verbers/v.verb.${VNAME}/tld.${SERVERTLD}
 /var/local/ink/knights/verberstatus verb ${VNAME} solo
+. /var/local/ink/verbers/v.verb.${VNAME}/tld.${SERVERTLD}
 fi
+
+# Create the initial Bind rDNS zone file
+echo "\$TTL    86400
+@		IN  SOA		${hostURI}. root.${nameURI}. (
+0000000001		; Serial No
+10800			; Refresh
+3600			; Retry
+604800			; Expire
+1800 )			; Minimum TTL
+
+; Nameserver Defaults
+@		IN  NS		${hostURI}." > /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${VTLD}
+## Now, change the variables for this specific Inkver's Verber settings
+### Include Inker's Verb config
+. /var/local/verb/conf/sitenameip
+echo "@		IN  NS		${hostURI}.
+@		IN  NS		${SITEINKERDNS}.
+
+; Hosted Domains" >> /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${VTLD}
+## Permissions
+chown bind:bind /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${VTLD}
+chmod 644 /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${VTLD}
+
+# Create the first Verber DNS entries
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} email
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} city
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} one
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} ink
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} blue
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} vip
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} kiwi
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} cash
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} pink
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} red
+/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} rocks

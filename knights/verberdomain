@@ -2,7 +2,8 @@
 #inkVerbKnight! verb.ink
 #set -e
 
-# This adds a Verber to an existing Verber's account on this Inker
+# This adds a hosted domain to an existing Verber's account on this Inker
+## The proper way to move a domain from one Verber host to another is to remove it with verberdomainkill, then add it again with the correct Verber TLD
 
 # How to use:
 ## ./verberdomain [ Verber type - "verb" or "dmod" ] [ vname OR mod-domain.tld ] [ domain.tld ] [ Verber tld - if not "ink" ]
@@ -25,10 +26,14 @@ if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
 
 # Default tld value
 if [ -z "$4" ]; then
-  VTLD="ink"
-fi
+  VTLD="ink"; fi
 
-# Check if multiple hosting is allowed
+# Check if the necessary Bind rDNS file exists
+if [ ! -f "/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${VTLD}" ]; then
+  echo "Something's wrong. The Bind rDNS file for this Verber should exist, but it does not. Doing nothing."
+  exit 6; fi
+
+# Check whether the multiple hosting option is allowed, default if not
 if [ "${VTLD}" != "ink" ]; then
   . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/nfo.status
   if [ "${VSTATUS}" = "solo" ]; then
@@ -38,8 +43,7 @@ if [ "${VTLD}" != "ink" ]; then
   echo "Verber allows hosting on multiple servers, using \"${VTLD}\"..."
   else "Something's wrong with the tld \"${VTLD}\", using \"ink\" instead..."
   VTLD="ink"
-  fi
-fi
+fi; fi
 
 # Include the config
 . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${VTLD}
@@ -52,3 +56,35 @@ domEXPIPV6=\"${VERBEREXPIPV6}\"
 domARPAIP4=\"${VERBERARPAIP4}\"
 domARPAIP6=\"${VERBERARPAIP6}\"
 " > /var/local/ink/verbers/v.${VTYPE}.${VNAME}/domain.${VDOMAIN}
+
+# DNS zone file
+## Hosting Verber's config
+echo "\$TTL    86400
+${VDOMAIN}.		IN  SOA		${hostURI}. root.${nameURI}. (
+0000000001		; Serial No
+10800			; Refresh
+3600			; Retry
+604800			; Expire
+1800 )			; Minimum TTL
+
+\$ORIGIN ${VDOMAIN}.
+; Nameserver Defaults
+@		IN  NS		${hostURI}." > /var/cache/bind/zones-inker/db.${VDOMAIN}
+## Inker's Verber config
+. /var/local/verb/conf/sitenameip
+echo "@		IN  NS		${hostURI}.
+@		IN  NS		${SITEINKERDNS}.
+
+; Original Defaults
+@		IN  A		${VERBERIPV4}
+@		IN  AAAA	${VERBERIPV6}
+*.${VDOMAIN}.		IN  A		${VERBERIPV4}
+*.${VDOMAIN}.		IN  AAAA	${VERBERIPV6}" >> /var/cache/bind/zones-inker/db.${VDOMAIN}
+chown bind:bind /var/cache/bind/zones-inker/db.${VDOMAIN}
+chmod 644 /var/cache/bind/zones-inker/db.${VDOMAIN}
+
+# rDNS zone file
+## DEV: In theory, this should not be necessary since the rDNS should be updadating automatically from the master Bind Verber
+## DEV: Delete this entire rDNS zone file addition if the Bind slave file on this Inker is updating properly
+#echo "${VERBERARPAIP4}		IN  PTR  ${VDOMAIN}.
+#${VERBERARPAIP6}		IN  PTR  ${VDOMAIN}." >> /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${VTLD}
