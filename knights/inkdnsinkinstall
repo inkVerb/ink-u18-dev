@@ -22,9 +22,6 @@ echo "inkDNS not installed, run the inkdnsinstall serf on this Verber first."
 exit 0; fi
 
 # Create structure
-mkdir -p /var/cache/bind/verbers
-chown -R bind:bind /var/cache/bind/verbers
-chmod -R 644 /var/cache/bind/verbers
 mkdir -p /var/cache/bind/zones-inker
 chown -R bind:bind /var/cache/bind/zones-inker
 chmod -R 644 /var/cache/bind/zones-inker

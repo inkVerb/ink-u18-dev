@@ -2,7 +2,7 @@
 #inkVerbKnight! verb.ink
 #set -e
 
-# This resets a complete list of a single remote inkDNS verm/domain-mod Verber account's base domain and all it's hosted domain slave records in the Bind9 config file: /var/cache/bind/verbers/named.conf.VERBERACCOUNT.verbacct
+# This resets a complete list of a single remote inkDNS verm/domain-mod Verber account's base domain and all it's hosted domain slave records in the Bind9 config file: /etc/bind/named.conf.VERBERACCOUNT.verbacct
 ## This only processes one, single Verber "name" account, but incldues all domains for its DNS
 ## This only resets the entries in Bind, not the actual zone file contents themselves.
 ## Eg, this will set all name.verb.ink, name.verb.emial, name.verb.blue, etc, and other domains (added to this Inker) records, but only for the "name" Verb namespace, also with a domain-mod
@@ -29,10 +29,10 @@ echo "The Verber \"${VNAME}\" type \"${VTYPE}\" does not exist. Doing nothing."
 exit 0; fi
 
     # Refresh the inkDNS domain list file
-    rm -f /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    touch /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    chown bind:bind /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
-    chmod 644 /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    rm -f /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
+    touch /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
+    chown bind:bind /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
+    chmod 644 /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ## Each verb tld
     cd /var/local/ink/verbers/v.${VTYPE}.${VNAME}/
@@ -42,72 +42,72 @@ exit 0; fi
 
     ### Start the file
     echo "// inkVerb-inkDNS ink domain list file, managed automatically, edits will likely be deleted
-" > /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+" > /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### IP6 & IP4
     echo "// IP6 & IP4
 zone \"${VERBERARPAIP6}\" { type slave; masters { "${VERBERIPV6}"; }; file \"/var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${onlyTLD}\"; allow-query { any; }; };
 zone \"${VERBERARPAIP4}\" { type slave; masters { "${VERBERIPV4}"; }; file \"/var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${onlyTLD}\"; allow-query { any; }; };
 
-// Hosted Verb TLDs" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+// Hosted Verb TLDs" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ### email
     if [ -n "${emailURI}" ]; then
-      echo "zone \"${emailURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${emailURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${emailURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${emailURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### city
     if [ -n "${cityURI}" ]; then
-      echo "zone \"${cityURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${cityURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${cityURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${cityURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### one
     if [ -n "${oneURI}" ]; then
-      echo "zone \"${oneURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${oneURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${oneURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${oneURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### ink
     if [ -n "${inkURI}" ]; then
-      echo "zone \"${inkURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${inkURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${inkURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${inkURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### blue
     if [ -n "${blueURI}" ]; then
-      echo "zone \"${blueURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${blueURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${blueURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${blueURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### vip
     if [ -n "${vipURI}" ]; then
-      echo "zone \"${vipURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${vipURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${vipURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${vipURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### kiwi
     if [ -n "${kiwiURI}" ]; then
-      echo "zone \"${kiwiURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${kiwiURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${kiwiURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${kiwiURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### cash
     if [ -n "${cashURI}" ]; then
-      echo "zone \"${cashURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${cashURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${cashURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${cashURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### pink
     if [ -n "${pinkURI}" ]; then
-      echo "zone \"${pinkURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${pinkURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${pinkURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${pinkURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### red
     if [ -n "${redURI}" ]; then
-      echo "zone \"${redURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${redURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${redURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${redURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### rocks
     if [ -n "${rocksURI}" ]; then
-      echo "zone \"${rocksURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${rocksURI}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${rocksURI}\" { type slave; masters { ${VERBERIPV6}; ${VERBERIPV4}; }; file \"/var/cache/bind/zones-inker/db.${rocksURI}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     fi
 
     ### Wrap-up
-    echo "// Hosted domains" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+    echo "// Hosted domains" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     echo "Base Verber records updated for ${VTYPE} ${VNAME}."
     done
 
@@ -117,7 +117,7 @@ zone \"${VERBERARPAIP4}\" { type slave; masters { "${VERBERIPV4}"; }; file \"/va
       domainZone="$(echo ${domainNFO} | sed 's/domain\.//' )"
       . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/${domainNFO}
       . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${verberTLD}
-      echo "zone \"${domainZone}\" { type slave; masters { $domIP6; $domIP4; }; file \"/var/cache/bind/zones-inker/db.${domainZone}\"; allow-query { any; }; };" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
+      echo "zone \"${domainZone}\" { type slave; masters { $domIP6; $domIP4; }; file \"/var/cache/bind/zones-inker/db.${domainZone}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     echo "${domainZone} records updated for ${VTYPE} ${VNAME}."
     done
 
