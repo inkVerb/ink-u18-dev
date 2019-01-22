@@ -46,8 +46,8 @@ exit 0; fi
 
     ### IP6 & IP4
     echo "// IP6 & IP4
-zone \"${VERBERARPAIP6}\" { type slave; masters { "${VERBERIPV6}"; }; file \"/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${onlyTLD}\"; allow-query { any; }; };
-zone \"${VERBERARPAIP4}\" { type slave; masters { "${VERBERIPV4}"; }; file \"/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${onlyTLD}\"; allow-query { any; }; };
+zone \"${VERBERARPAIP6}\" { type slave; masters { "${VERBERIPV6}"; }; file \"/var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${onlyTLD}\"; allow-query { any; }; };
+zone \"${VERBERARPAIP4}\" { type slave; masters { "${VERBERIPV4}"; }; file \"/var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${onlyTLD}\"; allow-query { any; }; };
 
 // Hosted Verb TLDs" >> /var/cache/bind/verbers/named.conf.${VTYPE}.${VNAME}.verbacct
 

@@ -45,8 +45,8 @@ if [ -z "${!addverbURI}" ]; then
   exit 6; fi
 
 # Check if the necessary Bind rDNS file exists
-if [ ! -f "/var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${!hostingTLD}" ]; then
-  echo "Something's wrong. The Bind rDNS file for the \"${VTYPE}.${VNAME}.${!hostingTLD}\" Verber should exist, but it does not. Doing nothing."
+if [ ! -f "/var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${!hostingTLD}" ] || [ ! -f "/var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${!hostingTLD}" ]; then
+  echo "Something's wrong. The Bind rDNS files for the \"${VTYPE}.${VNAME}.${!hostingTLD}\" Verber should exist, but they do not. Doing nothing."
   exit 6; fi
 
 # Check whether the multiple hosting option is allowed, abort if not
@@ -87,8 +87,8 @@ chmod 644 /var/cache/bind/zones-inker/db.${!addverbURI}
 # rDNS zone file
 ## DEV: In theory, this should not be necessary since the rDNS should be updadating automatically from the master Bind Verber
 ## DEV: Delete this entire rDNS zone file addition if the Bind slave file on this Inker is updating properly
-#echo "${VERBERARPAIP4}		IN  PTR  ${!addverbURI}.
-#${VERBERARPAIP6}		IN  PTR  ${!addverbURI}." >> /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${!hostingTLD}
+#echo "${VERBERARPAIP4}		IN  PTR  ${!addverbURI}." >> /var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${!hostingTLD}
+#echo "${VERBERARPAIP6}		IN  PTR  ${!addverbURI}." >> /var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${!hostingTLD}
 
 # Finish
 echo "The Verb domain \"${!addverbURI}\" has been added to the Verber host with TLD \"${!hostingTLD}\"."

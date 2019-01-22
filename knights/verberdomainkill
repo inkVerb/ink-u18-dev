@@ -25,5 +25,6 @@ if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
 # Domain config
 rm -f /var/local/ink/verbers/v.${VTYPE}.${VNAME}/domain.${VDOMAIN}
 
-# rDNS zone file
-sed -i "s/${VDOMAIN}/d" /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${VTLD}
+# rDNS zone files
+sed -i "s/${VDOMAIN}/d" /var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${VTLD}
+sed -i "s/${VDOMAIN}/d" /var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${VTLD}

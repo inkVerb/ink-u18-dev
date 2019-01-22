@@ -89,5 +89,5 @@ chmod 644 /var/cache/bind/zones-inker/db.${VDOMAIN}
 # rDNS zone file
 ## DEV: In theory, this should not be necessary since the rDNS should be updadating automatically from the master Bind Verber
 ## DEV: Delete this entire rDNS zone file addition if the Bind slave file on this Inker is updating properly
-#echo "${VERBERARPAIP4}		IN  PTR  ${VDOMAIN}.
-#${VERBERARPAIP6}		IN  PTR  ${VDOMAIN}." >> /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${VTLD}
+#echo "${VERBERARPAIP6}		IN  PTR  ${VDOMAIN}." >> /var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${VTLD}
+#echo "${VERBERARPAIP4}		IN  PTR  ${VDOMAIN}." >> /var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${VTLD}

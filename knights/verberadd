@@ -19,6 +19,9 @@ SVMAILTLD="$4"
 SERVERIPV4="$5"
 SERVERIPV6="$6"
 DMODBASE="$7"
+# Inker nsURI
+. /var/local/verb/conf/siteurilist
+nsURI="${hostURI}"
 
 # Verber type
 if [ "${VNAME}" = "MOD" ]; then
@@ -230,6 +233,7 @@ rocksURI=\"${VNAME}.verb.rocks\"
 fi
 
 # Create the initial Bind rDNS zone file
+## IP6
 echo "\$TTL    86400
 @		IN  SOA		${hostURI}. root.${nameURI}. (
 0000000001		; Serial No
@@ -239,17 +243,31 @@ echo "\$TTL    86400
 1800 )			; Minimum TTL
 
 ; Nameserver Defaults
-@		IN  NS		${hostURI}." > /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${SERVERTLD}
-## Now, change the variables for this specific Inkver's Verber settings
-### Include Inker's Verb config
-. /var/local/verb/conf/sitenameip
-echo "@		IN  NS		${hostURI}.
+@		IN  NS		${hostURI}.
+@		IN  NS		${nsURI}.
 @		IN  NS		${SITEINKERDNS}.
 
-; Hosted Domains" >> /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${SERVERTLD}
+; Hosted Domains" >> /var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${SERVERTLD}
+## IP4
+echo "\$TTL    86400
+@		IN  SOA		${hostURI}. root.${nameURI}. (
+0000000001		; Serial No
+10800			; Refresh
+3600			; Retry
+604800			; Expire
+1800 )			; Minimum TTL
+
+; Nameserver Defaults
+@		IN  NS		${hostURI}.
+@		IN  NS		${nsURI}.
+@		IN  NS		${SITEINKERDNS}.
+
+; Hosted Domains" >> /var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${SERVERTLD}
 ## Permissions
-chown bind:bind /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${SERVERTLD}
-chmod 644 /var/cache/bind/zones-inker/nv.${VTYPE}.${VNAME}.${SERVERTLD}
+chown bind:bind /var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${SERVERTLD}
+chown bind:bind /var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${SERVERTLD}
+chmod 644 /var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${SERVERTLD}
+chmod 644 /var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${SERVERTLD}
 
 # Almost finished
 echo " The ${VTYPE} Verber for ${VNAME} has been setup with the primary TLD as ${SERVERTLD}, now premaring other TLD entries..."
