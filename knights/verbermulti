@@ -3,6 +3,7 @@
 #set -e
 
 # This adds a to-be-hosted TLD Verber to an existing Verber on this Inker
+## Prerequesite: `verberstatus` (multi)
 
 # How to use:
 ## ./verbermulti [ vspace name / MOD ] [ main tld ] [ IPv4 ] [ IPv6 ] [ domain.tld mod base - OPTIONAL, only if a domain mod ]

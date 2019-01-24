@@ -3,6 +3,7 @@
 #set -e
 
 # This moves a hosted TLD to a secondary-multi Verber on this Inker
+## Prerequesite: `verberstatus` (multi)
 
 # How to use:
 ## ./verbermovetld [ vspace name / MOD ] [ hosting tld ] [ moving tld ]
