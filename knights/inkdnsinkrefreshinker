@@ -18,7 +18,7 @@ if [ -f "/var/local/ink/conf/inkdns/inkdnsstatus" ]; then
     echo '// inkVerb-inkDNS domain list file, managed automatically, edits will likely be deleted' >> /etc/bind/named.conf.inker
     chown bind:bind /etc/bind/named.conf.inker
     chmod 644 /etc/bind/named.conf.inker
-    cd /var/cache/bind/verbers
+    cd /etc/bind
     for namedVAccount in named.conf.*.*.verbacct; do
       echo "include \"/etc/bind/${namedVAccount}\";" >> /etc/bind/named.conf.inker
     done
