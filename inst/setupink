@@ -20,7 +20,7 @@ fi
 . /var/local/verb/conf/sitenameip
 
 # Create configs
-cd /var/local/ink
+cd /opt/ink
 mv inst/conf conf
 
 # Executable scripts
@@ -35,30 +35,30 @@ chmod ug+x knights/*
 #/var/local/verb/serfs/inkcertdole-all-verbs
 
 # Block the repo from web listing
-mkdir -p /var/local/ink/repo
-echo "Options -Indexes" >> /var/local/ink/repo/.htaccess
+mkdir -p /opt/ink/repo
+echo "Options -Indexes" >> /opt/ink/repo/.htaccess
 
 # Create inkNet Client links
-chmod u+s /var/local/ink/knights/verber-inkcertreceivecsr
-chmod u+s /var/local/ink/knights/verber-inkcertreceiverevoke
+chmod u+s /opt/ink/knights/verber-inkcertreceivecsr
+chmod u+s /opt/ink/knights/verber-inkcertreceiverevoke
 ## Read-only links for wpadd repo lists (This may need to be re-mounted at every startup.)
 #### ink to root
-ln -sfn /var/local/ink /root/
+ln -sfn /opt/ink /root/
 #### Boss box
-ln -sfn /var/local/ink/knights /var/local/verb/boss/
+ln -sfn /opt/ink/knights /var/local/verb/boss/
 #### inkNet: verber-inkcertreceivecsr
-ln -sfn /var/local/ink/knights/verber-inkcertreceivecsr /var/local/verb/tools/
+ln -sfn /opt/ink/knights/verber-inkcertreceivecsr /var/local/verb/tools/
 #### inkNet: verber-inkcertreceiverevoke
-ln -sfn /var/local/ink/knights/verber-inkcertreceiverevoke /var/local/verb/tools/
+ln -sfn /opt/ink/knights/verber-inkcertreceiverevoke /var/local/verb/tools/
 #### repo
-ln -sfn /var/local/ink/repo /var/local/verb/tools/
+ln -sfn /opt/ink/repo /var/local/verb/tools/
 #### wpadd machine list
-ln -sfn /var/local/ink/conf/wpaddsites/wpadd.list /var/local/verb/tools/
+ln -sfn /opt/ink/conf/wpaddsites/wpadd.list /var/local/verb/tools/
 #### wpadd human list
-ln -sfn /var/local/ink/conf/wpaddsites/wpadd.human.list /var/local/verb/tools/
+ln -sfn /opt/ink/conf/wpaddsites/wpadd.human.list /var/local/verb/tools/
 
 # File permissions for configs
-chmod 750 -R /var/local/ink/conf
+chmod 750 -R /opt/ink/conf
 
 # Link the inkget repo to the hostname
 ## Check that all is well
@@ -82,7 +82,7 @@ exit 22
 fi
 
 # Start the Inker cron entries
-cp /var/local/ink/conf/inkcron /etc/cron.d/inker
+cp /opt/ink/conf/inkcron /etc/cron.d/inker
 chmod 0644 /etc/cron.d/inker
 
 # Finish

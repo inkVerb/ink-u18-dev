@@ -35,7 +35,7 @@ chmod 444 ${DOMAIN}.cert.pem
 shred -f -x ${DOMAIN}.csr.pem
 cp -f ${DOMAIN}.cert.pem intermediate/certs/
 cd ..
-/var/local/verb/serfs/vtxzin ${DOMAIN}
+/opt/verb/serfs/vtxzin ${DOMAIN}
 wait
 mv ${DOMAIN}.vtxz inkcert.${DOMAIN}.vtxz
 shred -f -x ${DOMAIN}/${DOMAIN}.cert.pem

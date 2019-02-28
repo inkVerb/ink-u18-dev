@@ -8,8 +8,8 @@
 ## ./inkdnsinkrefreshinker
 
 
-if [ -f "/var/local/ink/conf/inkdns/inkdnsstatus" ]; then
-. /var/local/ink/conf/inkdns/inkdnsstatus
+if [ -f "/opt/ink/conf/inkdns/inkdnsstatus" ]; then
+. /opt/ink/conf/inkdns/inkdnsstatus
   if [ "${INKDNSINKERSTAT}" = "INSTALLED" ]; then
 
     # inkDNS domain list file

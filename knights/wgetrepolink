@@ -15,10 +15,10 @@ if [ ! -d /var/www/html/${REPODOMAIN}/ ]; then
 echo "The necessary web folder does not exist. Is the domain installed?"
 exit 2
 fi
-ln -sfn /var/local/ink/repo /var/www/html/${REPODOMAIN}/
+ln -sfn /opt/ink/repo /var/www/html/${REPODOMAIN}/
 echo "allow from all
 Options +Indexes
 IndexOptions +FancyIndexing
 " > /var/www/html/${REPODOMAIN}/.htaccess
-sed -i "s/INKREPO=.*/INKREPO=\"${REPODOMAIN}\"/g" /var/local/ink/conf/siteinkerrepo
+sed -i "s/INKREPO=.*/INKREPO=\"${REPODOMAIN}\"/g" /opt/ink/conf/siteinkerrepo
 

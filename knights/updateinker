@@ -10,16 +10,16 @@ set -e
 
 
 # Include the config
-. /var/local/ink/conf/inkerinfo
+. /opt/ink/conf/inkerinfo
 
 # Download and unpack the latest checked version from the Inkver repo
-cd /var/local/ink/
+cd /opt/ink/
 git clone https://github.com/inkverb/${INKUPDATEREPO}
 
 # Run the update script
-chmod +x /var/local/ink/${INKUPDATEREPO}/update
-/var/local/ink/${INKUPDATEREPO}/update
+chmod +x /opt/ink/${INKUPDATEREPO}/update
+/opt/ink/${INKUPDATEREPO}/update
 
 # Remove the entire updater
-rm -rf /var/local/ink/${INKUPDATEREPO}
+rm -rf /opt/ink/${INKUPDATEREPO}
 

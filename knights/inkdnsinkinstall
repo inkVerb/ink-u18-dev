@@ -8,11 +8,11 @@
 ## ./inkdnsinkinstall
 
 # Include the configs
-. /var/local/verb/conf/sitenameip
+. /opt/verb/conf/sitenameip
 
 
-if [ -f "/var/local/verb/conf/inkdns/inkdnsstatus" ]; then
-. /var/local/verb/conf/inkdns/inkdnsstatus
+if [ -f "/opt/verb/conf/inkdns/inkdnsstatus" ]; then
+. /opt/verb/conf/inkdns/inkdnsstatus
 else
 echo "inkDNS not installed, run the inkdnsinstall serf on this Verber first."
 exit 0; fi
@@ -36,4 +36,4 @@ echo 'include "/etc/bind/named.conf.inker";' >> /etc/bind/named.conf.local
 echo "#!/bin/sh
 
 INKDNSINKERSTAT=INSTALLED
-" > /var/local/ink/conf/inkdns/inkdnsstatus
+" > /opt/ink/conf/inkdns/inkdnsstatus

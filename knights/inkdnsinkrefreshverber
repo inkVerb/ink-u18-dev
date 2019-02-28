@@ -19,12 +19,12 @@ VTYPE="$1"
 VNAME="$2"
 
 # Install status
-if [ -f "/var/local/ink/conf/inkdns/inkdnsstatus" ]; then
-. /var/local/ink/conf/inkdns/inkdnsstatus
+if [ -f "/opt/ink/conf/inkdns/inkdnsstatus" ]; then
+. /opt/ink/conf/inkdns/inkdnsstatus
   if [ "${INKDNSINKERSTAT}" = "INSTALLED" ]; then
 
 # Account status
-if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
+if [ ! -d "/opt/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
 echo "The Verber \"${VNAME}\" type \"${VTYPE}\" does not exist. Doing nothing."
 exit 0; fi
 
@@ -35,10 +35,10 @@ exit 0; fi
     chmod 644 /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
 
     ## Each verb tld
-    cd /var/local/ink/verbers/v.${VTYPE}.${VNAME}/
+    cd /opt/ink/verbers/v.${VTYPE}.${VNAME}/
     for vTLDnfo in tld.*; do
     onlyTLD="$(echo ${vTLDnfo} | sed 's/tld\.//' )"
-    . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/${vTLDnfo}
+    . /opt/ink/verbers/v.${VTYPE}.${VNAME}/${vTLDnfo}
 
     ### Start the file
     echo "// inkVerb-inkDNS ink domain list file, managed automatically, edits will likely be deleted
@@ -112,11 +112,11 @@ zone \"${VERBERARPAIP4}\" { type slave; masters { "${VERBERIPV4}"; }; file \"/va
     done
 
     ## Each domain
-    cd /var/local/ink/verbers/v.${VTYPE}.${VNAME}
+    cd /opt/ink/verbers/v.${VTYPE}.${VNAME}
     for domainNFO in domain.*; do
       domainZone="$(echo ${domainNFO} | sed 's/domain\.//' )"
-      . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/${domainNFO}
-      . /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${verberTLD}
+      . /opt/ink/verbers/v.${VTYPE}.${VNAME}/${domainNFO}
+      . /opt/ink/verbers/v.${VTYPE}.${VNAME}/tld.${verberTLD}
       echo "zone \"${domainZone}\" { type slave; masters { $domIP6; $domIP4; }; file \"/var/cache/bind/zones-inker/db.${domainZone}\"; allow-query { any; }; };" >> /etc/bind/named.conf.${VTYPE}.${VNAME}.verbacct
     echo "${domainZone} records updated for ${VTYPE} ${VNAME}."
     done

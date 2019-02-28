@@ -18,12 +18,12 @@ VNAME="$2"
 VDOMAIN="$3"
 
 # Check if Verber account exists
-if [ ! -d "/var/local/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
+if [ ! -d "/opt/ink/verbers/v.${VTYPE}.${VNAME}" ]; then
   echo "That Verber is not setup. Doing nothing."
   exit 0; fi
 
 # Domain config
-rm -f /var/local/ink/verbers/v.${VTYPE}.${VNAME}/domain.${VDOMAIN}
+rm -f /opt/ink/verbers/v.${VTYPE}.${VNAME}/domain.${VDOMAIN}
 
 # rDNS zone files
 sed -i "s/${VDOMAIN}/d" /var/cache/bind/zones-inker/nv.IP6.${VTYPE}.${VNAME}.${VTLD}

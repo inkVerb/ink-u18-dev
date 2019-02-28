@@ -59,7 +59,7 @@ fi
 
 # Unpack and put everything where it goes
 cd /etc/inkcert/ca/req
-/var/local/verb/serfs/vtxzout interm; wait
+/opt/verb/serfs/vtxzout interm; wait
 mv interm/ca.inkcert.cert.pem /etc/inkcert/ca/ca-certs/
 mv interm/*.cert.pem /etc/inkcert/ca/intermediate/certs/
 rm -rf interm

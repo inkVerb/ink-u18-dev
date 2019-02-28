@@ -20,7 +20,7 @@ SERVERIPV4="$5"
 SERVERIPV6="$6"
 DMODBASE="$7"
 # Inker nsURI
-. /var/local/verb/conf/siteurilist
+. /opt/verb/conf/siteurilist
 nsURI="${hostURI}"
 
 # Verber type
@@ -131,7 +131,7 @@ SERVERRARPA6=$(rarpa_ipv6 ${SERVEREXPIP6})
 
 # For domain mod Verber
 if [ -n "${DMODBASE}" ] && [ "${VNAME}" = "MOD" ]; then
-mkdir -p /var/local/ink/verbers/v.${VTYPE}.${DMODBASE}
+mkdir -p /opt/ink/verbers/v.${VTYPE}.${DMODBASE}
 echo "#!/bin/sh
 ## This is a config file for other verb scripts
 
@@ -147,7 +147,7 @@ cashVERBER=\"${SERVERTLD}\"
 pinkVERBER=\"${SERVERTLD}\"
 redVERBER=\"${SERVERTLD}\"
 rocksVERBER=\"${SERVERTLD}\"
-" > /var/local/ink/verbers/v.${VTYPE}.${DMODBASE}/nfo.base
+" > /opt/ink/verbers/v.${VTYPE}.${DMODBASE}/nfo.base
 
 echo "#!/bin/sh
 ## This is a config file for other verb scripts
@@ -176,13 +176,13 @@ cashURI=\"cash.${DMODBASE}\"
 pinkURI=\"pink.${DMODBASE}\"
 redURI=\"red.${DMODBASE}\"
 rocksURI=\"rocks.${DMODBASE}\"
-" > /var/local/ink/verbers/v.${VTYPE}.${DMODBASE}/tld.${SERVERTLD}
-/var/local/ink/knights/verberstatus ${VTYPE} ${DMODBASE} solo
-. /var/local/ink/verbers/v.${VTYPE}.${DMODBASE}/tld.${SERVERTLD}
+" > /opt/ink/verbers/v.${VTYPE}.${DMODBASE}/tld.${SERVERTLD}
+/opt/ink/knights/verberstatus ${VTYPE} ${DMODBASE} solo
+. /opt/ink/verbers/v.${VTYPE}.${DMODBASE}/tld.${SERVERTLD}
 
 # Verb domain Verber
 else
-mkdir -p /var/local/ink/verbers/v.${VTYPE}.${VNAME}
+mkdir -p /opt/ink/verbers/v.${VTYPE}.${VNAME}
 echo "#!/bin/sh
 ## This is a config file for other verb scripts
 
@@ -198,7 +198,7 @@ cashVERBER=\"${SERVERTLD}\"
 pinkVERBER=\"${SERVERTLD}\"
 redVERBER=\"${SERVERTLD}\"
 rocksVERBER=\"${SERVERTLD}\"
-" > /var/local/ink/verbers/v.${VTYPE}.${VNAME}/nfo.base
+" > /opt/ink/verbers/v.${VTYPE}.${VNAME}/nfo.base
 
 echo "#!/bin/sh
 ## This is a config file for other verb scripts
@@ -227,9 +227,9 @@ cashURI=\"${VNAME}.verb.cash\"
 pinkURI=\"${VNAME}.verb.pink\"
 redURI=\"${VNAME}.verb.red\"
 rocksURI=\"${VNAME}.verb.rocks\"
-" > /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${SERVERTLD}
-/var/local/ink/knights/verberstatus ${VTYPE} ${VNAME} solo
-. /var/local/ink/verbers/v.${VTYPE}.${VNAME}/tld.${SERVERTLD}
+" > /opt/ink/verbers/v.${VTYPE}.${VNAME}/tld.${SERVERTLD}
+/opt/ink/knights/verberstatus ${VTYPE} ${VNAME} solo
+. /opt/ink/verbers/v.${VTYPE}.${VNAME}/tld.${SERVERTLD}
 fi
 
 # Create the initial Bind rDNS zone file
@@ -273,17 +273,17 @@ chmod 644 /var/cache/bind/zones-inker/nv.IP4.${VTYPE}.${VNAME}.${SERVERTLD}
 echo " The ${VTYPE} Verber for ${VNAME} has been setup with the primary TLD as ${SERVERTLD}, now premaring other TLD entries..."
 
 # Create the first Verber DNS entries
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} email
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} city
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} one
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} ink
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} blue
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} vip
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} kiwi
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} cash
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} pink
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} red
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} rocks
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} email
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} city
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} one
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} ink
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} blue
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} vip
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} kiwi
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} cash
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} pink
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} red
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} rocks
 
 # Finish
 echo "All setup!"

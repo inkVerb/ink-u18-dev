@@ -26,45 +26,45 @@ fi
 # For domain mod Verber
 if [ -n "${DMODBASE}" ] && [ "${VNAME}" = "MOD" ]; then
 ## Check if installed
-if [ ! -f "/var/local/ink/verbers/v.dmod.${DMODBASE}/nfo.base" ]; then
+if [ ! -f "/opt/ink/verbers/v.dmod.${DMODBASE}/nfo.base" ]; then
 echo "No such Verber installed. That comes first."
 fi
 ## Check if multi-hosting is allowed
-. /var/local/ink/verbers/v.dmod.${VNAME}/nfo.status
+. /opt/ink/verbers/v.dmod.${VNAME}/nfo.status
 if [ "${VSTATUS}" != "multi" ]; then
 echo "This Verber is not yet allowed multiple hosts. That comes first. Use: verberstatus verb ${DMODBASE} multi"; exit 0
 fi
 ## Check if the hosting tld exists
-if [ ! -f "/var/local/ink/verbers/v.dmod.${VNAME}/tld.${HOSTTLD}"]; then
+if [ ! -f "/opt/ink/verbers/v.dmod.${VNAME}/tld.${HOSTTLD}"]; then
 echo "The TLD ${HOSTTLD} is not setup. Do that first. Use: verbermulti ${VNAME} ${HOSTTLD} ...with IP information and domain base"
 fi
 ## Set the configs
 hostedURI="${MOVETLD}.${DMODBASE}"
-sed -i "/${hostedURI}/d" /var/local/ink/verbers/v.dmod.${VNAME}/*
-sed -i "s/${MOVETLD}VERBER=.*/${MOVETLD}VERBER=\"${HOSTTLD}\"" /var/local/ink/verbers/v.dmod.${DMODBASE}/nfo.base
-echo "${MOVETLD}URI=\"${hostedURI}\"" >> /var/local/ink/verbers/v.dmod.${VNAME}/tld.${HOSTTLD}
+sed -i "/${hostedURI}/d" /opt/ink/verbers/v.dmod.${VNAME}/*
+sed -i "s/${MOVETLD}VERBER=.*/${MOVETLD}VERBER=\"${HOSTTLD}\"" /opt/ink/verbers/v.dmod.${DMODBASE}/nfo.base
+echo "${MOVETLD}URI=\"${hostedURI}\"" >> /opt/ink/verbers/v.dmod.${VNAME}/tld.${HOSTTLD}
 
 # Verb domain Verber
 else
 ## Check if installed
-if [ ! -f "/var/local/ink/verbers/v.verb.${VNAME}/nfo.base" ]; then
+if [ ! -f "/opt/ink/verbers/v.verb.${VNAME}/nfo.base" ]; then
 echo "No such Verber installed. That comes first."
 fi
 ## Check if multi-hosting is allowed
-. /var/local/ink/verbers/v.verb.${VNAME}/nfo.status
+. /opt/ink/verbers/v.verb.${VNAME}/nfo.status
 if [ "${VSTATUS}" != "multi" ]; then
 echo "This Verber is not yet allowed multiple hosts. That comes first. Use: verberstatus verb ${DMODBASE} multi"; exit 0
 fi
 ## Check if the hosting tld exists
-if [ ! -f "/var/local/ink/verbers/v.verb.${VNAME}/tld.${HOSTTLD}"]; then
+if [ ! -f "/opt/ink/verbers/v.verb.${VNAME}/tld.${HOSTTLD}"]; then
 echo "The TLD ${HOSTTLD} is not setup. Do that first. Use: verbermulti ${VNAME} ${HOSTTLD} ...with IP information and domain base"
 fi
 ## Set the configs
 hostedURI="${VNAME}.verb.${MOVETLD}"
-sed -i "/${hostedURI}/d" /var/local/ink/verbers/v.verb.${VNAME}/*
-sed -i "s/${MOVETLD}VERBER=.*/${MOVETLD}VERBER=\"${HOSTTLD}\"" /var/local/ink/verbers/v.verb.${VNAME}/nfo.base
-echo "${MOVETLD}URI=\"${hostedURI}\"" >> /var/local/ink/verbers/v.verb.${VNAME}/tld.${HOSTTLD}
+sed -i "/${hostedURI}/d" /opt/ink/verbers/v.verb.${VNAME}/*
+sed -i "s/${MOVETLD}VERBER=.*/${MOVETLD}VERBER=\"${HOSTTLD}\"" /opt/ink/verbers/v.verb.${VNAME}/nfo.base
+echo "${MOVETLD}URI=\"${hostedURI}\"" >> /opt/ink/verbers/v.verb.${VNAME}/tld.${HOSTTLD}
 fi
 
 # Bind DNS zone file
-/var/local/ink/knights/verberverbdomain ${VTYPE} ${VNAME} ${MOVETLD}
+/opt/ink/knights/verberverbdomain ${VTYPE} ${VNAME} ${MOVETLD}

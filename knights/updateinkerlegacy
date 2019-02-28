@@ -12,13 +12,13 @@ set -e
 
 
 # Download and unpack the latest checked version from the Inkver repo
-cd /var/local/ink/
-/var/local/verb/serfs/inkget verber.update.current; wait
-/var/local/verb/serfs/vtxzout inker.update.current; wait
+cd /opt/ink/
+/opt/verb/serfs/inkget verber.update.current; wait
+/opt/verb/serfs/vtxzout inker.update.current; wait
 
 # Run the update script
-/var/local/ink/inkerer.update.current/update; wait
+/opt/ink/inkerer.update.current/update; wait
 
 # Remove the entire updater
-rm -rf /var/local/ink/inker.update.current
+rm -rf /opt/ink/inker.update.current
 

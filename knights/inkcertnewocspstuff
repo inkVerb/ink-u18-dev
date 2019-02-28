@@ -48,7 +48,7 @@ OCSPPROFILE=$1
 OCSPDOMAIN=$2
 
 # Include the config
-. /var/local/verb/conf/inkcert/csr-inf/csr.${OCSPPROFILE}.inf
+. /opt/verb/conf/inkcert/csr-inf/csr.${OCSPPROFILE}.inf
 
 # Key - OCSP
 cd /etc/inkcert/ca

@@ -122,11 +122,11 @@ SERVERRARPA6=$(rarpa_ipv6 ${SERVEREXPIP6})
 # For domain mod Verber
 if [ -n "${DMODBASE}" ] && [ "${VNAME}" = "MOD" ]; then
 ## Check if installed
-if [ ! -f "/var/local/ink/verbers/v.dmod.${DMODBASE}/nfo.base" ]; then
+if [ ! -f "/opt/ink/verbers/v.dmod.${DMODBASE}/nfo.base" ]; then
 echo "No such Verber installed. That comes first."; exit 0
 fi
 ## Check if multi-hosting is allowed
-. /var/local/ink/verbers/v.dmod.${VNAME}/nfo.status
+. /opt/ink/verbers/v.dmod.${VNAME}/nfo.status
 if [ "${VSTATUS}" != "multi" ]; then
 echo "This Verber is not yet allowed multiple hosts. That comes first. Use: verberstatus verb ${DMODBASE} multi"; exit 0
 fi
@@ -134,10 +134,10 @@ fi
 newnameURI="${SERVERTLD}.${DMODBASE}"
 newemailTLDURI="${SERVERTLD}.${DMODBASE}"
 ## Check for duplicare IP address entries
-cd /var/local/ink/verbers/v.dmod.${VNAME}/
+cd /opt/ink/verbers/v.dmod.${VNAME}/
 for vTLDnfo in tld.*; do
 onlyTLD="$(echo ${vTLDnfo} | sed 's/tld\.//' )"
-. /var/local/ink/verbers/v.dmod.${VNAME}/${vTLDnfo}
+. /opt/ink/verbers/v.dmod.${VNAME}/${vTLDnfo}
   if [ "${nameURI}" = "${newnameURI}" ]; then
     echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
   fi
@@ -176,16 +176,16 @@ VERBERARPAIP6=\"${SERVERRARPA6}\"
 # Hosted URI list
 vNAME=\"${DMODBASE}\"
 ${SERVERTLD}URI=\"${SERVERTLD}.${DMODBASE}\"
-" > /var/local/ink/verbers/v.dmod.${DMODBASE}/tld.${SERVERTLD}
+" > /opt/ink/verbers/v.dmod.${DMODBASE}/tld.${SERVERTLD}
 
 # Verb domain Verber
 else
 ## Check if installed
-if [ ! -f "/var/local/ink/verbers/v.verb.${VNAME}/nfo.base" ]; then
+if [ ! -f "/opt/ink/verbers/v.verb.${VNAME}/nfo.base" ]; then
 echo "No such Verber installed. That comes first."; exit 0
 fi
 ## Check if multi-hosting is allowed
-. /var/local/ink/verbers/v.verb.${VNAME}/nfo.status
+. /opt/ink/verbers/v.verb.${VNAME}/nfo.status
 if [ "${VSTATUS}" != "multi" ]; then
 echo "This Verber is not yet allowed multiple hosts. That comes first. Use: verberstatus verb ${DMODBASE} multi"; exit 0
 fi
@@ -193,10 +193,10 @@ fi
 newnameURI="${VNAME}.verb.${SERVERTLD}"
 newemailTLDURI="${VNAME}.verb.${SERVERTLD}"
 ## Check for duplicare IP address entries
-cd /var/local/ink/verbers/v.verb.${VNAME}/
+cd /opt/ink/verbers/v.verb.${VNAME}/
 for vTLDnfo in tld.*; do
 onlyTLD="$(echo ${vTLDnfo} | sed 's/tld\.//' )"
-. /var/local/ink/verbers/v.verb.${VNAME}/${vTLDnfo}
+. /opt/ink/verbers/v.verb.${VNAME}/${vTLDnfo}
   if [ "${nameURI}" = "${newnameURI}" ]; then
     echo "Duplicate hosting TLD and/or IP address. Each Verber must have a unique TLD and IP addresses. Aborting."; exit 0
   fi
@@ -235,5 +235,5 @@ VERBERARPAIP6=\"${SERVERRARPA6}\"
 # Hosted URI list
 vNAME=\"${VNAME}\"
 ${SERVERTLD}URI=\"${VNAME}.verb.${SERVERTLD}\"
-" > /var/local/ink/verbers/v.verb.${VNAME}/tld.${SERVERTLD}
+" > /opt/ink/verbers/v.verb.${VNAME}/tld.${SERVERTLD}
 fi
