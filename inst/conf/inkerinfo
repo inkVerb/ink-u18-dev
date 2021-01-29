@@ -1,5 +1,5 @@
 #!/bin/sh
 ## This is a config file for other ink scripts
 
-INKUPDATEREPO=ink-dev-update
+INKUPDATEREPO=ink-u18-dev-update
 
